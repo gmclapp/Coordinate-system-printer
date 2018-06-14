@@ -42,9 +42,10 @@ class csys2():
         self.origin = np.transpose(self.T[:-1,3:])
 
     def resolve(self):
-        # This function will find the H.T. matrix relating self to the inertial
-        # csys through a string of parent csys as applicable for the purpose of
-        # printing
+        ''' This function will find the H.T. matrix relating self to the
+        inertial csys through a string of parent csys as applicable for
+        the purpose of printing'''
+        
         if self.parent == None:
             print("No parent matrix specified.")
             self.ux = np.transpose(self.T[:-1,0:1])
@@ -54,6 +55,9 @@ class csys2():
             pass
 
     def get_plot_data(self):
+        '''This function takes the unit vectors of the csys, and the location
+        of the csys's origin and returns a 6 element row vector for printing.'''
+        
         self.rx = np.column_stack([self.origin, self.ux])
         self.ry = np.column_stack([self.origin, self.uy])
         self.rz = np.column_stack([self.origin, self.uz])
