@@ -39,16 +39,17 @@ class csys2():
         # [rows,columns]
         self.T = T
         self.parent = parent
-        self.origin = self.T[:-1,3:]
+        self.origin = np.transpose(self.T[:-1,3:])
 
     def resolve(self):
         # This function will find the H.T. matrix relating self to the inertial
         # csys through a string of parent csys as applicable for the purpose of
         # printing
         if self.parent == None:
-            self.ux = self.T[:-1,0:1]
-            self.uy = self.T[:-1,1:2]
-            self.uz = self.T[:-1,2:3]
+            print("No parent matrix specified.")
+            self.ux = np.transpose(self.T[:-1,0:1])
+            self.uy = np.transpose(self.T[:-1,1:2])
+            self.uz = np.transpose(self.T[:-1,2:3])
         else:
             pass
 
@@ -143,6 +144,7 @@ root = csys(root_origin, root_ux, root_uy, root_uz, color=red)
 A = csys2(get_T())
 A.resolve()
 A.get_plot_data()
+print(A.plot_data)
 
 X, Y, Z, U, V, W = zip(*root.plot_data)
 X1, Y1, Z1, U1, V1, W1 = zip(*A.plot_data)
