@@ -5,6 +5,8 @@ import sanitize_inputs as si
 import robotics
 
 class row_vec():
+    '''Retrieves a list of real number for x, y, and z from the user,
+    and constructs a numpy row vector.'''
     def __init__(self, coords):
         self.x = coords[0]
         self.y = coords[1]
@@ -12,6 +14,8 @@ class row_vec():
         self.vec = np.array([[self.x,self.y,self.z]])
 
 class col_vec():
+    '''Retrieves a list of real number for x, y, and z from the user,
+    and constructs a numpy column vector.'''
     def __init__(self, coords):
         self.x = coords[0]
         self.y = coords[1]
