@@ -34,9 +34,15 @@ class csys():
         self.plot_data = np.row_stack([self.rx, self.ry, self.rz])
 
 class csys2():
-    def __init__(self, T, parent=None):
+    def __init__(self, name, T, parent=None):
+        ''' This function accepts a 4x4 homogeneous transform matrix and the
+        name of a parent matrix. The tranformation will be applied to the parent
+        and the origin and orientation of the new matrix will be supplied with
+        respect to the inertial reference frame for the purpose of printing.'''
+        
         # [from:to,from:to] slice includes from but not to
         # [rows,columns]
+        self.name = name
         self.T = T
         self.parent = parent
         self.origin = np.transpose(self.T[:-1,3:])
@@ -138,6 +144,7 @@ green = (0,1,0)
 
 root_color = red
 transformed_color = blue
+second_tranform_color = green
 
 root_origin = row_vec([0,0,0])
 root_ux = row_vec([1,0,0])
@@ -145,7 +152,7 @@ root_uy = row_vec([0,1,0])
 root_uz = row_vec([0,0,1])
 
 root = csys(root_origin, root_ux, root_uy, root_uz, color=red)
-A = csys2(get_T())
+A = csys2('A', get_T())
 A.resolve()
 A.get_plot_data()
 print(A.plot_data)
@@ -157,7 +164,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 ax.quiver(X, Y, Z, U, V, W, color=root_color)
 ax.quiver(X1, Y1, Z1, U1, V1, W1, color=transformed_color)
-ax.set_xlim([0, 3])
-ax.set_ylim([0, 3])
-ax.set_zlim([0, 3])
+ax.set_xlim([-3, 3])
+ax.set_ylim([-3, 3])
+ax.set_zlim([-3, 3])
 plt.show()
