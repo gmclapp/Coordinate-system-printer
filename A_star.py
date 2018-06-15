@@ -37,4 +37,13 @@ def generate_path(start, goal, *obstacles):
     for o in obstacles:
         o_list = generate_obstacle(o, o_list)
 
+def initialize_grid():
+    grid = np.empty((i,j,k), dtype=object)
+    for x in range(i):
+        for y in range(j):
+            for z in range(k):
+                grid[i,j,k] = node(point(i,j,k))
+                # where point is a column vector object
+                
+        
     
