@@ -7,7 +7,7 @@ class obstacle():
     def collision_detect(self, point):
         '''This function accepts a column vector and checks if it collides with
         the obstacle object.'''
-        d = (self.loc[:,:]-point[:,:])**2
+        d = (self.loc[:,:]-point[:,:])**2 # This will not run, just outlining.
         + (self.loc[:,:]-point[:,:])**2
         + (self.loc[:,:]-point[:,:])**2
 
