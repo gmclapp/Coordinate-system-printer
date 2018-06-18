@@ -15,22 +15,27 @@ print("Cool obstacle!\nIt is located at:\nX: ",
       "It has a height:\nh: ", obst.h,"\n", sep='')
 
 print("Enter the starting position. >>> ")
-start = si.get_coords()
+start = A_star.node(si.get_coords())
 
 print("Thanks, the robot gripper will start at:\nX: ",
-      start.x,"\n",
-      "Y: ", start.y,"\n",
-      "Z: ", start.z,"\n",sep='')
+      start.loc.x,"\n",
+      "Y: ", start.loc.y,"\n",
+      "Z: ", start.loc.z,"\n",sep='')
 
 print("Enter the payload position. >>> ")
-end = si.get_coords()
+end = A_star.node(si.get_coords())
 
 print("Ok, the payload will be retreived from:\nX: ",
-      end.x,"\n",
-      "Y: ", end.y,"\n",
-      "Z: ", end.z,"\n",sep='')
+      end.loc.x,"\n",
+      "Y: ", end.loc.y,"\n",
+      "Z: ", end.loc.z,"\n",sep='')
 
+n = si.get_integer("Enter the approximate number of nodes along the path. >>> ", lower = 0)
 
 obst.collision_detect(start)
+move_length = A_star.dist(start, end)
+dr = move_length/n
+
+print("That move is",move_length,"long.\n The mesh resolution is",dr)
 
 # path = A_star.generate_path(start, end, obst)

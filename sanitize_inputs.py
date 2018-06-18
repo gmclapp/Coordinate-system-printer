@@ -11,7 +11,7 @@ class col_vec():
         
 def get_real_number(prompt=None, upper=float('Inf'), lower=float('-Inf')):
     '''Gets a real number from the user with an optional prompt. Positive and
-    negative limits can be set. If not set, the default values is 'Inf' and
+    negative limits can be set. If not set, the default values are 'Inf' and
     '-Inf' respectively.'''
 
     num_flag = False
@@ -26,6 +26,29 @@ def get_real_number(prompt=None, upper=float('Inf'), lower=float('-Inf')):
             
         except ValueError:
             print("Enter a real number.")
+            num_flag = False
+            
+    return(number)
+
+def get_integer(prompt=None, upper=float('Inf'), lower=float('-Inf')):
+    '''Gets an integer from the user with an optional prompt. Positive and
+    negative limits can be set. If not set, the default values are 'Inf' and
+    '-Inf' respectively.'''
+    num_flag = False
+    while(not num_flag):
+        try:
+            number = int(input(prompt))
+            number += 0
+            # This will throw an exception if number is not an integer.
+            
+            if lower < number < upper:
+                num_flag = True
+            else:
+                print("Enter a real number between",lower,"and",upper)
+            
+            
+        except ValueError:
+            print("Enter an integer.")
             num_flag = False
             
     return(number)

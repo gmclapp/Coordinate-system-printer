@@ -7,9 +7,9 @@ class obstacle():
     def collision_detect(self, point):
         '''This function accepts a column vector and checks if it collides with
         the obstacle object.'''
-        d = (self.loc.x-point.x)**2 # This will not run, just outlining.
-        + (self.loc.y-point.y)**2
-        + (self.loc.z-point.z)**2
+        d = (self.loc.x-point.loc.x)**2 # This will not run, just outlining.
+        + (self.loc.y-point.loc.y)**2
+        + (self.loc.z-point.loc.z)**2
 
         if d <= self.r:
             return(True)
@@ -41,6 +41,12 @@ class node():
         # gcost + hcost
         self.f_cost = self.g_cost+self.h_cost
 
+def dist(n1, n2):
+    d = ((n1.loc.x-n2.loc.x)**2
+         + (n1.loc.y-n2.loc.y)**2
+         + (n1.loc.z-n2.loc.z)**2)**0.5
+
+    return(d)
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
     o_list.append(obstacle)
