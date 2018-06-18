@@ -30,4 +30,7 @@ print("Ok, the payload will be retreived from:\nX: ",
       "Y: ", start.y,"\n",
       "Z: ", start.z,"\n",sep='')
 
-path = A_star.generate_path(start, end, obst)
+
+obst.collision_detect(start)
+
+# path = A_star.generate_path(start, end, obst)
