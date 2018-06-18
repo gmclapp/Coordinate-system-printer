@@ -20,10 +20,26 @@ class node():
     def __init__(self, location):
         self.loc = location
 
+    def open_node(self, parent):
+        # copy path from parent
+        pass
+    
     def set_walkable(self, walk=True):
         '''If walk is True, the node is reachable, and is not blocked by an
         obstacle.'''
         self.walk = walk
+
+    def set_g-cost(self, start_loc):
+        # how far away from the start node
+        pass
+
+    def set_h-cost(self, end_loc):
+        # how far away from the end node
+        pass
+
+    def set_f-cost(self):
+        # gcost + hcost
+        self.f_cost = self.g_cost+self.h_cost
 
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
@@ -34,6 +50,9 @@ def generate_path(start, goal, *obstacles):
     '''This function generates a path given a starting location, a goal
     location, and an arbitrary number of obstacles.'''
     o_list = []
+    open_nodes = [node(start)] # nodes to be evaluated
+    closed_nodes = [] # nodes that have already been evaluated
+    
     for o in obstacles:
         o_list = generate_obstacle(o, o_list)
 
