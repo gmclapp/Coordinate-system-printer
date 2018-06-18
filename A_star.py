@@ -1,5 +1,5 @@
 class obstacle():
-    def __init__(self, location, radius, height):
+    def __init__(self, location, radius, height=float('Inf')):
         self.loc = location
         self.r = radius
         self.h = height
@@ -11,7 +11,7 @@ class obstacle():
         + (self.loc.y-point.loc.y)**2
         + (self.loc.z-point.loc.z)**2
 
-        if d <= self.r:
+        if (self.loc.z <= point.loc.z <= self.loc.z + self.h) and d <= self.r:
             return(True)
         else:
             return(False)

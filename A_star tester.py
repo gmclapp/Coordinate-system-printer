@@ -4,7 +4,7 @@ import A_star
 print("Enter the coordinates of the obstacle.")
 o_pos = si.get_coords()
 o_r = si.get_real_number("Enter the radius of the obstacle >>> ", lower = 0)
-o_h = si.get_real_number("Enter the height of the obstacle >>> ", lower = 0)
+o_h = si.get_real_number("Enter the height of the obstacle. (leave blank for infinite height). >>> ", lower = 0)
 
 obst = A_star.obstacle(o_pos, o_r, o_h)
 print("Cool obstacle!\nIt is located at:\nX: ",
