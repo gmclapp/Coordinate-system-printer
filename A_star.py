@@ -29,15 +29,15 @@ class node():
         obstacle.'''
         self.walk = walk
 
-    def set_g-cost(self, start_loc):
+    def set_gcost(self, start_loc):
         # how far away from the start node
         pass
 
-    def set_h-cost(self, end_loc):
+    def set_hcost(self, end_loc):
         # how far away from the end node
         pass
 
-    def set_f-cost(self):
+    def set_fcost(self):
         # gcost + hcost
         self.f_cost = self.g_cost+self.h_cost
 
