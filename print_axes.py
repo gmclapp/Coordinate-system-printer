@@ -13,15 +13,6 @@ class row_vec():
         self.z = coords[2]
         self.vec = np.array([[self.x,self.y,self.z]])
 
-class col_vec():
-    '''Retrieves a list of real number for x, y, and z from the user,
-    and constructs a numpy column vector.'''
-    def __init__(self, coords):
-        self.x = coords[0]
-        self.y = coords[1]
-        self.z = coords[2]
-        self.vec = np.array([[self.x],[self.y],[self.z]])
-
 class csys():
     def __init__(self, origin, ux, uy, uz, parent = None, color = (1,0,0)):
         '''This function takes an origin point, and three unit vectors which
@@ -70,26 +61,6 @@ class csys2():
         self.plot_data = np.row_stack([self.rx, self.ry, self.rz])
         return(self.plot_data)
         
-def get_coords(rows=3):
-    '''This function gets the coordinates for a point in 3D space from the user.
-    It includes the error checking logic required to ensure the point's
-    useability in subsequent functions.'''
-
-    P_x = si.get_real_number("X >>>")
-    P_y = si.get_real_number("Y >>>")
-    P_z = si.get_real_number("Z >>>")
-
-    point = col_vec([P_x,P_y,P_z])
-
-    if rows == 3:
-        return(point)
-    elif rows == 4:
-        point.vec = np.row_stack([point.vec,[1]])
-        return(point)
-    else:
-        print("Invalid argument.")
-        return(None)
-
 def get_R(axis, angle):
     '''This function generates a 3x3 rotation matrix given an angle specified
     in degrees and an axis about which to rotate specified by a string 'x',
@@ -111,7 +82,7 @@ def get_T():
     frame A.'''
     
     print("Enter the position of frame B with respect to frame A.")
-    P_B_origin = get_coords()
+    P_B_origin = si.get_coords()
     axis = si.get_letter("X, Y, or Z axis?",['x','X','y','Y','z','Z'])
     theta = si.get_real_number("Enter the angle of rotation in degrees.")
     R = get_R(axis, theta)

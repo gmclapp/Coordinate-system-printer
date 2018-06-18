@@ -43,7 +43,7 @@ class node():
 
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
-    o_list.append(obstacle(obstacle))
+    o_list.append(obstacle)
     return(o_list)
 
 def generate_path(start, goal, *obstacles):
