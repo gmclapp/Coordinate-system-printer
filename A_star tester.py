@@ -26,9 +26,9 @@ print("Enter the payload position. >>> ")
 end = si.get_coords()
 
 print("Ok, the payload will be retreived from:\nX: ",
-      start.x,"\n",
-      "Y: ", start.y,"\n",
-      "Z: ", start.z,"\n",sep='')
+      end.x,"\n",
+      "Y: ", end.y,"\n",
+      "Z: ", end.z,"\n",sep='')
 
 
 obst.collision_detect(start)
