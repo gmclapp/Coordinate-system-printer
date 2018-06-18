@@ -84,17 +84,17 @@ def get_T():
     print("Enter the position of frame B with respect to frame A.")
     P_B_origin = si.get_coords()
     axis = si.get_letter("X, Y, or Z axis?",['x','X','y','Y','z','Z'])
-    theta = si.get_real_number("Enter the angle of rotation in degrees.")
+    theta = si.get_real_number("Enter the angle of rotation in degrees. >>> ")
     R = get_R(axis, theta)
     T = robotics.HT_from_R_and_Porg(R, P_B_origin.vec)
 
     return(T)
 
 def get_DH_T():
-    alpha = si.get_real_number("Enter link twist (alpha) in degrees.")
-    a = si.get_real_number("Enter link length (a).")
-    theta = si.get_real_number("Enter link rotation (theta) in degrees.")
-    d = si.get_real_number("Enter link offset (d).")
+    alpha = si.get_real_number("Enter link twist (alpha) in degrees. >>> ")
+    a = si.get_real_number("Enter link length (a). >>> ")
+    theta = si.get_real_number("Enter link rotation (theta) in degrees. >>> ")
+    d = si.get_real_number("Enter link offset (d). >>> ")
 
     T = robotics.DH(alpha, a, theta, d)
 

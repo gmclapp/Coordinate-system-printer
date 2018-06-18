@@ -9,20 +9,20 @@ class col_vec():
         self.z = coords[2]
         self.vec = np.array([[self.x],[self.y],[self.z]])
         
-def get_real_number(prompt=None, positive=True, negative=True):
-# Gets a real number from the user with an optional prompt. Whether positive
-# or negative values should be allowed can be specified with those arguments.
+def get_real_number(prompt=None, upper=float('Inf'), lower=float('-Inf')):
+    '''Gets a real number from the user with an optional prompt. Positive and
+    negative limits can be set. If not set, the default values is 'Inf' and
+    '-Inf' respectively.'''
 
     num_flag = False
     while(not num_flag):
         try:
             number = float(input(prompt))
-            if (number >= 0 and positive) or (number <= 0 and negative):
+            if lower < number < upper:
                 num_flag = True
-            elif(not positive and not negative):
-                print("You must allow either positive or negative or both.")
             else:
-                pass
+                print("Enter a real number between",lower,"and",upper)
+            
             
         except ValueError:
             print("Enter a real number.")
