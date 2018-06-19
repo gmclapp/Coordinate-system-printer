@@ -34,11 +34,14 @@ class csys():
         
         if self.parent == None:
             print("No parent matrix specified.")
-            self.ux = np.transpose(self.T[:-1,0:1])
-            self.uy = np.transpose(self.T[:-1,1:2])
-            self.uz = np.transpose(self.T[:-1,2:3])
+            self.T_root = self.T
+            
         else:
-            pass
+            self.T_root = np.dot(self.T,self.parent.T_root)
+
+        self.ux = np.transpose(self.T_root[:-1,0:1])
+        self.uy = np.transpose(self.T_root[:-1,1:2])
+        self.uz = np.transpose(self.T_root[:-1,2:3])
 
     def find_limits(self):
         '''This function finds the extremes of the csys for the purpose of
@@ -87,7 +90,7 @@ def get_T():
     
     print("Enter the position of frame B with respect to frame A.")
     P_B_origin = si.get_coords()
-    axis = si.get_letter("X, Y, or Z axis?",['x','X','y','Y','z','Z'])
+    axis = si.get_letter("X, Y, or Z axis? >>> ",['x','X','y','Y','z','Z'])
     theta = si.get_real_number("Enter the angle of rotation in degrees. >>> ")
     R = get_R(axis, theta)
     T = robotics.HT_from_R_and_Porg(R, P_B_origin.vec)
@@ -130,7 +133,7 @@ root = csys('Root', auto_get_T(root_origin.vec,'x',0))
 root.resolve()
 root.get_plot_data()
 
-A = csys('A', get_T())
+A = csys('A', get_T(), root)
 
 A.resolve()
 A.get_plot_data()
