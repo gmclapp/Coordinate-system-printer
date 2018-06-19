@@ -14,17 +14,6 @@ class row_vec():
         self.vec = np.array([[self.x,self.y,self.z]])
 
 class csys():
-    def __init__(self, origin, ux, uy, uz, parent = None, color = (1,0,0)):
-        '''This function takes an origin point, and three unit vectors which
-            define a coordinate system and calculates three rays for plotting
-            using matplotlib.'''
-        
-        self.rx = np.column_stack([origin.vec, ux.vec])
-        self.ry = np.column_stack([origin.vec, uy.vec])
-        self.rz = np.column_stack([origin.vec, uz.vec])
-        self.plot_data = np.row_stack([self.rx, self.ry, self.rz])
-
-class csys2():
     def __init__(self, name, T, parent=None):
         ''' This function accepts a 4x4 homogeneous transform matrix and the
         name of a parent matrix. The tranformation will be applied to the parent
@@ -51,6 +40,21 @@ class csys2():
         else:
             pass
 
+    def find_limits(self):
+        '''This function finds the extremes of the csys for the purpose of
+        sizing the plot.'''
+
+        # ux, uy, & uz are all unit vectors, so padding the origin by 2 is
+        # garaunteed to show them.
+        
+        self.x_min = self.origin[0,0] - 2.0
+        self.y_min = self.origin[0,1] - 2.0
+        self.z_min = self.origin[0,2] - 2.0
+
+        self.x_max = self.origin[0,0] + 2.0
+        self.y_max = self.origin[0,1] + 2.0
+        self.z_max = self.origin[0,2] + 2.0
+    
     def get_plot_data(self):
         '''This function takes the unit vectors of the csys, and the location
         of the csys's origin and returns a 6 element row vector for printing.'''
@@ -105,6 +109,7 @@ def auto_get_T(origin, axis, theta):
     vector for an origin, a string describing an axis of rotation, and
     an angle of rotation in degrees.'''
     R = get_R(axis, theta)
+    print(R)
     T = robotics.HT_from_R_and_Porg(R, origin)
                                
     return(T)
@@ -117,25 +122,39 @@ root_color = red
 transformed_color = blue
 second_tranform_color = green
 
-root_origin = row_vec([0,0,0])
-root_ux = row_vec([1,0,0])
-root_uy = row_vec([0,1,0])
-root_uz = row_vec([0,0,1])
+root_origin = si.col_vec([0,0,0])
 
-root = csys(root_origin, root_ux, root_uy, root_uz, color=red)
-A = csys2('A', get_T())
+print(root_origin.vec)
+
+root = csys('Root', auto_get_T(root_origin.vec,'x',0))
+root.resolve()
+root.get_plot_data()
+
+A = csys('A', get_T())
+
 A.resolve()
 A.get_plot_data()
 print(A.plot_data)
 
+root.find_limits()
+A.find_limits()
+
+p_xmin = min(root.x_min, A.x_min)
+p_xmax = max(root.x_max, A.x_max)
+p_ymin = min(root.y_min, A.y_min)
+p_ymax = max(root.y_max, A.y_max)
+p_zmin = min(root.z_min, A.z_min)
+p_zmax = max(root.z_max, A.z_max)
+
 X, Y, Z, U, V, W = zip(*root.plot_data)
 X1, Y1, Z1, U1, V1, W1 = zip(*A.plot_data)
+
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 ax.quiver(X, Y, Z, U, V, W, color=root_color)
 ax.quiver(X1, Y1, Z1, U1, V1, W1, color=transformed_color)
-ax.set_xlim([-3, 3])
-ax.set_ylim([-3, 3])
-ax.set_zlim([-3, 3])
+ax.set_xlim([p_xmin, p_xmax])
+ax.set_ylim([p_ymin, p_ymax])
+ax.set_zlim([p_zmin, p_zmax])
 plt.show()
