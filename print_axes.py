@@ -25,7 +25,6 @@ class csys():
         self.name = name
         self.T = T
         self.parent = parent
-        self.origin = np.transpose(self.T[:-1,3:])
 
     def resolve(self):
         ''' This function will find the H.T. matrix relating self to the
@@ -39,6 +38,7 @@ class csys():
         else:
             self.T_root = np.dot(self.T,self.parent.T_root)
 
+        self.origin = np.transpose(self.T_root[:-1,3:])
         self.ux = np.transpose(self.T_root[:-1,0:1])
         self.uy = np.transpose(self.T_root[:-1,1:2])
         self.uz = np.transpose(self.T_root[:-1,2:3])
