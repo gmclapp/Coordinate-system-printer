@@ -1,3 +1,5 @@
+import sanitize_inputs as si
+
 class obstacle():
     def __init__(self, location, radius, height=float('Inf')):
         self.loc = location
@@ -62,13 +64,22 @@ def generate_path(start, goal, *obstacles):
     for o in obstacles:
         o_list = generate_obstacle(o, o_list)
 
-def initialize_grid():
-    grid = np.empty((i,j,k), dtype=object)
-    for x in range(i):
-        for y in range(j):
-            for z in range(k):
-                grid[i,j,k] = node(point(i,j,k))
-                # where point is a column vector object
+def initialize_grid(x_dim, y_dim, z_dim):
+
+    grid = []
+    for k in range(z_dim):
+        column = []
+        for j in range(y_dim):
+            row = []
+            for i in range(x_dim):
+                print("Adding node: (",i,',',j,',',k,')',sep='')
+                row.append(node(si.col_vec([i,j,k])))
+            column.append(row)
+        grid.append(column)
+
+    return(grid)
+        
+    
                 
         
     

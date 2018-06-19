@@ -38,4 +38,7 @@ dr = move_length/n
 
 print("That move is",move_length,"long.\n The mesh resolution is",dr)
 
+grid = A_star.initialize_grid(3, 4, 5)
+print("The node at (1,2,3) is:\n(",
+      grid[0][0][0].loc.x,',',grid[0][0][0].loc.y,',',grid[0][0][0].loc.z,')')
 # path = A_star.generate_path(start, end, obst)
