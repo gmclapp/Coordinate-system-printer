@@ -33,12 +33,5 @@ print("Ok, the payload will be retreived from:\nX: ",
 n = si.get_integer("Enter the approximate number of nodes along the path. >>> ", lower = 0)
 
 obst.collision_detect(start)
-move_length = A_star.dist(start, end)
-dr = move_length/n
 
-print("That move is",move_length,"long.\n The mesh resolution is",dr)
-
-grid = A_star.initialize_grid(3, 4, 5)
-print("The node at (1,2,3) is:\n(",
-      grid[0][0][0].loc.x,',',grid[0][0][0].loc.y,',',grid[0][0][0].loc.z,')')
 path = A_star.generate_path(start, end, obst)

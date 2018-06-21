@@ -47,12 +47,25 @@ class node():
     def set_fcost(self):
         self.f_cost = self.g_cost+self.h_cost
 
-def dist(n1, n2):
-    d = ((n1.loc.x-n2.loc.x)**2
-         + (n1.loc.y-n2.loc.y)**2
-         + (n1.loc.z-n2.loc.z)**2)**0.5
+class work_envelope():
+    def __init__(self, x_dim, y_dim, z_dim):
+        self.grid = []
+        for k in range(z_dim):
+            column = []
+            for j in range(y_dim):
+                row = []
+                for i in range(x_dim):
+                    print("Adding node: (",i,',',j,',',k,')',sep='')
+                    row.append(node(si.col_vec([i,j,k])))
+                column.append(row)
+            self.grid.append(column)
 
-    return(d)
+    def dist(self,n1, n2):
+        d = ((n1.loc.x-n2.loc.x)**2
+             + (n1.loc.y-n2.loc.y)**2
+             + (n1.loc.z-n2.loc.z)**2)**0.5
+
+        return(d)
 
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
@@ -63,6 +76,12 @@ def generate_path(start, goal, *obstacles):
     '''This function generates a path given a starting location, a goal
     location, and an arbitrary number of obstacles.'''
 
+    w_env = work_envelope(10, 5, 3)
+    print("The node at (9,4,2) is:\n(",
+      w_env.grid[2][4][9].loc.x,',',
+          w_env.grid[2][4][9].loc.y,',',
+          w_env.grid[2][4][9].loc.z,')')
+    
     path_complete = False
     
     o_list = []
@@ -72,7 +91,7 @@ def generate_path(start, goal, *obstacles):
     start_node.open_node()
     start_node.set_gcost(0)
     print("start_node gcost = ",start_node.g_cost,sep='')
-    start_node.set_hcost(dist(start, goal))
+    start_node.set_hcost(w_env.dist(start, goal))
     print("start_node hcost = ",start_node.h_cost,sep='')
     start_node.set_fcost()
     print("start_node fcost = ",start_node.f_cost,sep='')
@@ -91,21 +110,7 @@ def generate_path(start, goal, *obstacles):
             # close n
             pass
             
-
-def initialize_grid(x_dim, y_dim, z_dim):
-
-    grid = []
-    for k in range(z_dim):
-        column = []
-        for j in range(y_dim):
-            row = []
-            for i in range(x_dim):
-                print("Adding node: (",i,',',j,',',k,')',sep='')
-                row.append(node(si.col_vec([i,j,k])))
-            column.append(row)
-        grid.append(column)
-
-    return(grid)
+    
 
 
         
