@@ -27,7 +27,7 @@ class node():
             self.parent_g_cost = parent.gcost
         else:
             self.parent_g_cost = 0
-        
+
         # calculate h-cost
         # calculate f-cost
         # add to open list
@@ -71,8 +71,13 @@ def generate_path(start, goal, *obstacles):
 
     start_node.open_node()
     start_node.set_gcost(0)
+    print("start_node gcost = ",start_node.g_cost,sep='')
     start_node.set_hcost(dist(start, goal))
+    print("start_node hcost = ",start_node.h_cost,sep='')
     start_node.set_fcost()
+    print("start_node fcost = ",start_node.f_cost,sep='')
+
+    # grid.open_node(start_node)
                          
     open_nodes = [node(start)] # nodes to be evaluated
     closed_nodes = [] # nodes that have already been evaluated
