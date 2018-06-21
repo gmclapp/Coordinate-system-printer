@@ -123,41 +123,57 @@ green = (0,1,0)
 
 root_color = red
 transformed_color = blue
-second_tranform_color = green
+second_transform_color = green
+
+csys_list = []
 
 root_origin = si.col_vec([0,0,0])
 
-print(root_origin.vec)
-
 root = csys('Root', auto_get_T(root_origin.vec,'x',0))
-root.resolve()
-root.get_plot_data()
+csys_list.append(root)
 
 A = csys('A', get_T(), root)
+csys_list.append(A)
+B = csys('B', get_T(), A)
+csys_list.append(B)
 
-A.resolve()
-A.get_plot_data()
-print(A.plot_data)
-
-root.find_limits()
-A.find_limits()
-
-p_xmin = min(root.x_min, A.x_min)
-p_xmax = max(root.x_max, A.x_max)
-p_ymin = min(root.y_min, A.y_min)
-p_ymax = max(root.y_max, A.y_max)
-p_zmin = min(root.z_min, A.z_min)
-p_zmax = max(root.z_max, A.z_max)
-
+p_xmin = float('Inf')
+p_ymin = float('Inf')
+p_zmin = float('Inf')
+p_xmax = float('-Inf')
+p_ymax = float('-Inf')
+p_zmax = float('-Inf')
+for i in csys_list:
+    i.resolve()
+    i.get_plot_data()
+    i.find_limits()
+    if i.x_min < p_xmin:
+        p_xmin = i.x_min
+    if i.x_max > p_xmax:
+        p_xmax = i.x_max
+    if i.y_min < p_ymin:
+        p_ymin = i.y_min
+    if i.y_max > p_ymax:
+        p_ymax = i.y_max
+    if i.z_min < p_zmin:
+        p_zmin = i.z_min
+    if i.z_max > p_zmax:
+        p_zmax = i.z_max
+    
 X, Y, Z, U, V, W = zip(*root.plot_data)
 X1, Y1, Z1, U1, V1, W1 = zip(*A.plot_data)
+X2, Y2, Z2, U2, V2, W2 = zip(*B.plot_data)
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 ax.quiver(X, Y, Z, U, V, W, color=root_color)
 ax.quiver(X1, Y1, Z1, U1, V1, W1, color=transformed_color)
+ax.quiver(X2, Y2, Z2, U2, V2, W2, color=second_transform_color)
 ax.set_xlim([p_xmin, p_xmax])
 ax.set_ylim([p_ymin, p_ymax])
 ax.set_zlim([p_zmin, p_zmax])
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
 plt.show()
