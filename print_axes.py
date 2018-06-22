@@ -67,6 +67,9 @@ class csys():
         self.rz = np.column_stack([self.origin, self.uz])
         self.plot_data = np.row_stack([self.rx, self.ry, self.rz])
         return(self.plot_data)
+
+    def set_color(self, color):
+        self.color = color
         
 def get_R(axis, angle):
     '''This function generates a 3x3 rotation matrix given an angle specified
@@ -80,8 +83,6 @@ def get_R(axis, angle):
         R = robotics.Rz(angle)
 
     return(robotics.prettymat(R))
-        
-
 
 def get_T():
     '''This function generates a homogeneous transform matrix given a position
@@ -121,20 +122,21 @@ red = (1,0,0)
 blue = (0,0,1)
 green = (0,1,0)
 
-root_color = red
-transformed_color = blue
-second_transform_color = green
 
 csys_list = []
 
 root_origin = si.col_vec([0,0,0])
 
 root = csys('Root', auto_get_T(root_origin.vec,'x',0))
+root.set_color(red)
 csys_list.append(root)
 
 A = csys('A', get_T(), root)
+A.set_color(blue)
+
 csys_list.append(A)
 B = csys('B', get_T(), A)
+B.set_color(green)
 csys_list.append(B)
 
 p_xmin = float('Inf')
@@ -143,6 +145,10 @@ p_zmin = float('Inf')
 p_xmax = float('-Inf')
 p_ymax = float('-Inf')
 p_zmax = float('-Inf')
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
 for i in csys_list:
     i.resolve()
     i.get_plot_data()
@@ -159,17 +165,10 @@ for i in csys_list:
         p_zmin = i.z_min
     if i.z_max > p_zmax:
         p_zmax = i.z_max
+
+    X, Y, Z, U, V, W = zip(*i.plot_data)
+    ax.quiver(X, Y, Z, U, V, W, color=i.color)
     
-X, Y, Z, U, V, W = zip(*root.plot_data)
-X1, Y1, Z1, U1, V1, W1 = zip(*A.plot_data)
-X2, Y2, Z2, U2, V2, W2 = zip(*B.plot_data)
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-ax.quiver(X, Y, Z, U, V, W, color=root_color)
-ax.quiver(X1, Y1, Z1, U1, V1, W1, color=transformed_color)
-ax.quiver(X2, Y2, Z2, U2, V2, W2, color=second_transform_color)
 ax.set_xlim([p_xmin, p_xmax])
 ax.set_ylim([p_ymin, p_ymax])
 ax.set_zlim([p_zmin, p_zmax])
