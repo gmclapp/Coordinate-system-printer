@@ -118,61 +118,41 @@ def auto_get_T(origin, axis, theta):
                                
     return(T)
 
-red = (1,0,0)
-blue = (0,0,1)
-green = (0,1,0)
+def plot_csys(csys_list):
+    p_xmin = float('Inf')
+    p_ymin = float('Inf')
+    p_zmin = float('Inf')
+    p_xmax = float('-Inf')
+    p_ymax = float('-Inf')
+    p_zmax = float('-Inf')
 
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
 
-csys_list = []
+    for i in csys_list:
+        i.resolve()
+        i.get_plot_data()
+        i.find_limits()
+        if i.x_min < p_xmin:
+            p_xmin = i.x_min
+        if i.x_max > p_xmax:
+            p_xmax = i.x_max
+        if i.y_min < p_ymin:
+            p_ymin = i.y_min
+        if i.y_max > p_ymax:
+            p_ymax = i.y_max
+        if i.z_min < p_zmin:
+            p_zmin = i.z_min
+        if i.z_max > p_zmax:
+            p_zmax = i.z_max
 
-root_origin = si.col_vec([0,0,0])
-
-root = csys('Root', auto_get_T(root_origin.vec,'x',0))
-root.set_color(red)
-csys_list.append(root)
-
-A = csys('A', get_T(), root)
-A.set_color(blue)
-
-csys_list.append(A)
-B = csys('B', get_T(), A)
-B.set_color(green)
-csys_list.append(B)
-
-p_xmin = float('Inf')
-p_ymin = float('Inf')
-p_zmin = float('Inf')
-p_xmax = float('-Inf')
-p_ymax = float('-Inf')
-p_zmax = float('-Inf')
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-for i in csys_list:
-    i.resolve()
-    i.get_plot_data()
-    i.find_limits()
-    if i.x_min < p_xmin:
-        p_xmin = i.x_min
-    if i.x_max > p_xmax:
-        p_xmax = i.x_max
-    if i.y_min < p_ymin:
-        p_ymin = i.y_min
-    if i.y_max > p_ymax:
-        p_ymax = i.y_max
-    if i.z_min < p_zmin:
-        p_zmin = i.z_min
-    if i.z_max > p_zmax:
-        p_zmax = i.z_max
-
-    X, Y, Z, U, V, W = zip(*i.plot_data)
-    ax.quiver(X, Y, Z, U, V, W, color=i.color)
-    
-ax.set_xlim([p_xmin, p_xmax])
-ax.set_ylim([p_ymin, p_ymax])
-ax.set_zlim([p_zmin, p_zmax])
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_zlabel('Z')
-plt.show()
+        X, Y, Z, U, V, W = zip(*i.plot_data)
+        ax.quiver(X, Y, Z, U, V, W, color=i.color)
+        
+    ax.set_xlim([p_xmin, p_xmax])
+    ax.set_ylim([p_ymin, p_ymax])
+    ax.set_zlim([p_zmin, p_zmax])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    plt.show()
