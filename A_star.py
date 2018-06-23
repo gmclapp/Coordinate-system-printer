@@ -84,9 +84,39 @@ class work_envelope():
         z = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.z
 
         opened_nodes=[]
+        #Explore x dimension
         gcost = self.dx
         hcost = 0 # replace this with a distance calculation to the end node
         self.grid[x-1][y][z].open_node(gcost, hcost, n)
+        self.grid[x+1][y][z].open_node(gcost, hcost, n)
+
+        #Explore y dimension
+        gcost = self.dy
+        hcost = 0 # replace this with a distance calculation to the end node
+        self.grid[x][y-1][z].open_node(gcost, hcost, n)
+        self.grid[x][y+1][z].open_node(gcost, hcost, n)
+
+        #Explore z dimension
+        gcost = self.dz
+        hcost = 0 # replace this with a distance calculation to the end node
+        self.grid[x][y][z-1].open_node(gcost, hcost, n)
+        self.grid[x][y][z+1].open_node(gcost, hcost, n)
+
+        #Explore side diagonals
+        gcost = (self.dy**2 + self.dx**2)**0.5
+        hcost = 0 # replace this with a distance calculation to the end node
+        self.grid[x-1][y-1][z].open_node(gcost, hcost, n)
+        self.grid[x-1][y+1][z].open_node(gcost, hcost, n)
+        self.grid[x+1][y-1][z].open_node(gcost, hcost, n)
+        self.grid[x+1][y+1][z].open_node(gcost, hcost, n)
+        gcost = (self.dx**2+self.dz**2)**0.5
+        self.grid[x-1][y][z-1].open_node(gcost, hcost, n)
+        self.grid[x-1][y][z+1].open_node(gcost, hcost, n)
+        self.grid[x+1][y][z-1].open_node(gcost, hcost, n)
+        self.grid[x+1][y][z+1].open_node(gcost, hcost, n)
+
+        
+        
         self.grid[x-1][y][z].print_node()
         print("Node (",x,",",y,",",z,")")
 
