@@ -22,20 +22,22 @@ class node():
     def __init__(self, location):
         self.loc = location
 
-    def open_node(self, parent=None):
+    def open_node(self, gcost, hcost, parent=None):
         if parent != None:
+            print("This node has a parent!")
             self.parent_g_cost = parent.gcost
         else:
+            print("This node has no parent node. It's g-cost is zero")
             self.parent_g_cost = 0
 
-        # calculate h-cost
-        # calculate f-cost
-        # add to open list
-
+        self.gcost = self.parent_g_cost + gcost
+        self.hcost = hcost
+        
     def print_node(self):
         print("X: ",self.loc.x,
               "Y: ",self.loc.y,
-              "Z: ",self.loc.z, sep='')
+              "Z: ",self.loc.z,
+              "\nG-cost: ",self.gcost,sep='')
     def set_walkable(self, walk=True):
         '''If walk is True, the node is reachable, and is not blocked by an
         obstacle.'''
@@ -52,7 +54,11 @@ class node():
         self.f_cost = self.g_cost+self.h_cost
 
 class work_envelope():
-    def __init__(self, x_dim, y_dim, z_dim):
+    def __init__(self, x_dim, y_dim, z_dim, dx=1, dy=1, dz=1):
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
+        
         self.grid = []
         for k in range(z_dim):
             column = []
@@ -60,7 +66,7 @@ class work_envelope():
                 row = []
                 for i in range(x_dim):
                     print("Adding node: (",i,',',j,',',k,')',sep='')
-                    row.append(node(si.col_vec([i,j,k])))
+                    row.append(node(si.col_vec([i*dx,j*dy,k*dz])))
                 column.append(row)
             self.grid.append(column)
 
@@ -71,12 +77,17 @@ class work_envelope():
 
         return(d)
 
-    def close_node(self, l):
+    def close_node(self, n):
         # temporary variables for current node
-        x = self.grid[l.x][l.y][l.z].loc.x
-        y = self.grid[l.x][l.y][l.z].loc.y
-        z = self.grid[l.x][l.y][l.z].loc.z
-        
+        x = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.x
+        y = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.y
+        z = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.z
+
+        opened_nodes=[]
+        gcost = self.dx
+        hcost = 0 # replace this with a distance calculation to the end node
+        self.grid[x-1][y][z].open_node(gcost, hcost, n)
+        self.grid[x-1][y][z].print_node()
         print("Node (",x,",",y,",",z,")")
 
 def generate_obstacle(obstacle, o_list):
@@ -88,11 +99,7 @@ def generate_path(start, goal, *obstacles):
     '''This function generates a path given a starting location, a goal
     location, and an arbitrary number of obstacles.'''
 
-    w_env = work_envelope(10, 5, 3)
-    print("The node at (9,4,2) is:\n(",
-      w_env.grid[2][4][9].loc.x,',',
-          w_env.grid[2][4][9].loc.y,',',
-          w_env.grid[2][4][9].loc.z,')')
+    w_env = work_envelope(2, 3, 4)
     
     path_complete = False
     
@@ -103,11 +110,13 @@ def generate_path(start, goal, *obstacles):
 
     start_node = start
     goal_node = goal
+    start_h_cost = w_env.dist(start_node, goal_node)
 
+    start_node.open_node(0, start_h_cost, parent=None)
     start_node.print_node()
     
     open_nodes = [] # nodes to be evaluated
-    open_nodes.append(w_env.close_node(start_node.loc))
+    w_env.close_node(start_node)
                          
     closed_nodes = [start_node] # nodes that have already been evaluated
     
