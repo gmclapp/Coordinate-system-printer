@@ -31,7 +31,11 @@ class node():
         # calculate h-cost
         # calculate f-cost
         # add to open list
-    
+
+    def print_node(self):
+        print("X: ",self.loc.x,
+              "Y: ",self.loc.y,
+              "Z: ",self.loc.z, sep='')
     def set_walkable(self, walk=True):
         '''If walk is True, the node is reachable, and is not blocked by an
         obstacle.'''
@@ -67,6 +71,14 @@ class work_envelope():
 
         return(d)
 
+    def close_node(self, l):
+        # temporary variables for current node
+        x = self.grid[l.x][l.y][l.z].loc.x
+        y = self.grid[l.x][l.y][l.z].loc.y
+        z = self.grid[l.x][l.y][l.z].loc.z
+        
+        print("Node (",x,",",y,",",z,")")
+
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
     o_list.append(obstacle)
@@ -85,25 +97,20 @@ def generate_path(start, goal, *obstacles):
     path_complete = False
     
     o_list = []
-    start_node = node(start)
-    goal_node = node(goal)
-
-    start_node.open_node()
-    start_node.set_gcost(0)
-    print("start_node gcost = ",start_node.g_cost,sep='')
-    start_node.set_hcost(w_env.dist(start, goal))
-    print("start_node hcost = ",start_node.h_cost,sep='')
-    start_node.set_fcost()
-    print("start_node fcost = ",start_node.f_cost,sep='')
-
-    # grid.open_node(start_node)
-                         
-    open_nodes = [node(start)] # nodes to be evaluated
-    closed_nodes = [] # nodes that have already been evaluated
     
     for o in obstacles:
         o_list = generate_obstacle(o, o_list)
 
+    start_node = start
+    goal_node = goal
+
+    start_node.print_node()
+    
+    open_nodes = [] # nodes to be evaluated
+    open_nodes.append(w_env.close_node(start_node.loc))
+                         
+    closed_nodes = [start_node] # nodes that have already been evaluated
+    
     while path_complete == False:
         for n in open_nodes:
             # find node with the lowest fcost and open its neighbors.
