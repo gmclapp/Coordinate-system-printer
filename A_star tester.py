@@ -1,5 +1,6 @@
 import sanitize_inputs as si
 import A_star
+import time
 
 def manual_entry():
     print("Enter the coordinates of the obstacle.")
@@ -32,6 +33,8 @@ def auto_entry():
 
     return(obst, start, end, n)
 
+t0 = time.time()
+
 obst, start, end, n = auto_entry()
 
 print("Cool obstacle!\nIt is located at:\nX: ",
@@ -54,3 +57,5 @@ print("Ok, the payload will be retreived from:\nX: ",
 obst.collision_detect(start)
 
 path = A_star.generate_path(start, end, obst)
+t1 = time.time()
+print("Time: ",t1-t0)
