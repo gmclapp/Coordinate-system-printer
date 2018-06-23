@@ -113,49 +113,49 @@ class work_envelope():
         gcost = (self.dy**2 + self.dx**2)**0.5
         if x-1>=0:
             if y-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x-1][y-1][z], end)
                 self.grid[x-1][y-1][z].open_node(gcost, hcost, n)
             if y+1 < self.y_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x-1][y+1][z], end)
                 self.grid[x-1][y+1][z].open_node(gcost, hcost, n)
         if x+1 < self.x_dim:
             if y-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x+1][y-1][z], end)
                 self.grid[x+1][y-1][z].open_node(gcost, hcost, n)
             if y+1 < self.y_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x+1][y+1][z], end)
                 self.grid[x+1][y+1][z].open_node(gcost, hcost, n)
         
         gcost = (self.dx**2+self.dz**2)**0.5
         if x-1 >=0:
             if z-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x-1][y][z-1], end)
                 self.grid[x-1][y][z-1].open_node(gcost, hcost, n)
             if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x-1][y][z+1], end)
                 self.grid[x-1][y][z+1].open_node(gcost, hcost, n)
         if x+1<self.x_dim:
             if z-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x+1][y][z-1], end)
                 self.grid[x+1][y][z-1].open_node(gcost, hcost, n)
             if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x+1][y][z+1], end)
                 self.grid[x+1][y][z+1].open_node(gcost, hcost, n)
         
         gcost = (self.dy**2+self.dz**2)**0.5
         if y-1>=0:
             if z-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x][y-1][z-1], end)
                 self.grid[x][y-1][z-1].open_node(gcost, hcost, n)
             if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x][y-1][z+1], end)
                 self.grid[x][y-1][z+1].open_node(gcost, hcost, n)
         if y+1<self.y_dim:
             if z-1>=0:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x][y+1][z-1], end)
                 self.grid[x][y+1][z-1].open_node(gcost, hcost, n)
             if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y][z], end)
+                hcost = self.dist(self.grid[x][y+1][z+1], end)
                 self.grid[x][y+1][z+1].open_node(gcost, hcost, n)
 
         #Explore corners
@@ -163,32 +163,32 @@ class work_envelope():
         if x+1<self.x_dim:
             if y+1<self.y_dim:
                 if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x+1][y+1][z+1], end)
                     self.grid[x+1][y+1][z+1].open_node(gcost, hcost, n)
                 if z-1>=0:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x+1][y+1][z-1], end)
                     self.grid[x+1][y+1][z-1].open_node(gcost, hcost, n)
             if y-1>=0:
                 if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x+1][y-1][z+1], end)
                     self.grid[x+1][y-1][z+1].open_node(gcost, hcost, n)
                 if z-1>=0:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x+1][y-1][z-1], end)
                     self.grid[x+1][y-1][z-1].open_node(gcost, hcost, n)
         if x-1>=0:
             if y+1<self.y_dim:
                 if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x-1][y+1][z+1], end)
                     self.grid[x-1][y+1][z+1].open_node(gcost, hcost, n)
                 if z-1>=0:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x-1][y+1][z-1], end)
                     self.grid[x-1][y+1][z-1].open_node(gcost, hcost, n)
             if y-1>=0:
                 if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x-1][y-1][z+1], end)
                     self.grid[x-1][y-1][z+1].open_node(gcost, hcost, n)
                 if z-1>=0:
-                    hcost = self.dist(self.grid[x][y][z], end)
+                    hcost = self.dist(self.grid[x-1][y-1][z-1], end)
                     self.grid[x-1][y-1][z-1].open_node(gcost, hcost, n)
 
 def generate_obstacle(obstacle, o_list):
