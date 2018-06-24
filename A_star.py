@@ -21,6 +21,8 @@ class obstacle():
 class node():
     def __init__(self, location):
         self.loc = location
+        self.closed = False
+        self.opened = False
 
     def open_node(self, gcost, hcost, parent=None):
         if parent != None:
@@ -46,8 +48,10 @@ class node():
         obstacle.'''
         self.walk = walk
 
-    def set_fcost(self):
-        self.f_cost = self.g_cost+self.h_cost
+    def open_me(self):
+        self.opened = True
+    def close_me(self):
+        self.closed = True
 
 class work_envelope():
     def __init__(self, x_dim, y_dim, z_dim, dx=1, dy=1, dz=1):
@@ -219,6 +223,7 @@ class work_envelope():
                     hcost = self.dist(self.grid[x-1][y-1][z-1], end)
                     self.grid[x-1][y-1][z-1].open_node(gcost, hcost, n)
                     opened_nodes.append(self.grid[x-1][y-1][z-1])
+        n.close_me()
         return(opened_nodes)
 
 def generate_obstacle(obstacle, o_list):
@@ -261,9 +266,13 @@ def generate_path(start, goal, *obstacles):
         current=open_nodes.pop(0)
         newly_open = w_env.close_node(current, goal_node)
         for n in newly_open:
-            open_nodes.append(n)
+            if n.closed == False and n.opened == False:
+                n.open_me()
+                open_nodes.append(n)
+                
             if n.hcost < epsilon:
                 path_complete=True
+        for n in open_nodes:
             n.print_node()
         closed_nodes.append(current)
             
