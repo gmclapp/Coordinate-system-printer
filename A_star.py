@@ -55,24 +55,8 @@ class node():
 
 class work_envelope():
     def __init__(self, x_dim, y_dim, z_dim, dx=1, dy=1, dz=1):
-        self.x_dim = x_dim
-        self.y_dim = y_dim
-        self.z_dim = z_dim
-        
-        self.dx = dx
-        self.dy = dy
-        self.dz = dz
         
         self.grid = []
-        for k in range(x_dim):
-            column = []
-            for j in range(y_dim):
-                row = []
-                for i in range(z_dim):
-                    print("Adding node: (",i,',',j,',',k,')',sep='')
-                    row.append(node(si.col_vec([i*dx,j*dy,k*dz])))
-                column.append(row)
-            self.grid.append(column)
 
     def dist(self,n1, n2):
         d = (((n1.loc.x-n2.loc.x)*self.dx)**2
@@ -81,11 +65,17 @@ class work_envelope():
 
         return(d)
 
+    def check_match(self, n1, n2):
+        if n1.loc == n2.loc:
+            match = True
+        else:
+            match = False
+            
     def close_node(self, n, end):
         # temporary variables for current node
-        x = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.x
-        y = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.y
-        z = self.grid[n.loc.x][n.loc.y][n.loc.z].loc.z
+        x = n.loc.x
+        y = n.loc.y
+        z = n.loc.z
 
         opened_nodes=[]
         #Explore x dimension
