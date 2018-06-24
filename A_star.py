@@ -21,8 +21,6 @@ class obstacle():
 class node():
     def __init__(self, location):
         self.loc = location
-        self.closed = False
-        self.opened = False
 
     def open_node(self, gcost, hcost, parent=None):
         if parent != None:
@@ -48,15 +46,18 @@ class node():
         obstacle.'''
         self.walk = walk
 
-    def open_me(self):
-        self.opened = True
-    def close_me(self):
-        self.closed = True
-
 class work_envelope():
     def __init__(self, x_dim, y_dim, z_dim, dx=1, dy=1, dz=1):
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
         
-        self.grid = []
+        self.x_dim = x_dim
+        self.y_dim = y_dim
+        self.z_dim = z_dim
+        
+        self.open_nodes = []
+        self.closed_nodes = []
 
     def dist(self,n1, n2):
         d = (((n1.loc.x-n2.loc.x)*self.dx)**2
@@ -70,152 +71,84 @@ class work_envelope():
             match = True
         else:
             match = False
-            
+
+    def check_existence(self, n):
+        exists = False
+        for elem in self.open_nodes:
+            exists = self.check_match(elem, n)
+            if exists:
+                break
+            else:
+                pass
+        if not exists:
+            for elem in self.closed_nodes:
+                exists = self.check_match(elem, n)
+                if exists:
+                    break
+                else:
+                    pass
+        return exists
+    
     def close_node(self, n, end):
         # temporary variables for current node
         x = n.loc.x
         y = n.loc.y
         z = n.loc.z
 
-        opened_nodes=[]
-        #Explore x dimension
+        # Explore x dimension
         gcost = self.dx
         if x-1 >= 0:
-            hcost = self.dist(self.grid[x-1][y][z], end)
-            self.grid[x-1][y][z].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x-1][y][z])
+            new = node(si.col_vec([x-1,y,z]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
         if x+1 < self.x_dim:
-            hcost = self.dist(self.grid[x+1][y][z], end)
-            self.grid[x+1][y][z].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x+1][y][z])
-            
+            new = node(si.col_vec([x+1,y,z]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
 
-        #Explore y dimension
+        # Explore y dimension
         gcost = self.dy
         if y-1 >= 0:
-            hcost = self.dist(self.grid[x][y-1][z], end)
-            self.grid[x][y-1][z].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x][y-1][z])
+            new = node(si.col_vec([x,y-1,z]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
         if y+1 < self.y_dim:
-            hcost = self.dist(self.grid[x][y+1][z], end)
-            self.grid[x][y+1][z].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x][y+1][z])
-
-        #Explore z dimension
+            new = node(si.col_vec([x,y+1,z]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
+                
+        # Explore z dimension
         gcost = self.dz
         if z-1 >= 0:
-            hcost = self.dist(self.grid[x][y][z-1], end)
-            self.grid[x][y][z-1].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x][y][z-1])
+            new = node(si.col_vec([x,y,z-1]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
         if z+1 < self.z_dim:
-            hcost = self.dist(self.grid[x][y][z+1], end)
-            self.grid[x][y][z+1].open_node(gcost, hcost, n)
-            opened_nodes.append(self.grid[x][y][z+1])
-
-        #Explore side diagonals
-        gcost = (self.dy**2 + self.dx**2)**0.5
-        if x-1>=0:
-            if y-1>=0:
-                hcost = self.dist(self.grid[x-1][y-1][z], end)
-                self.grid[x-1][y-1][z].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x-1][y-1][z])
-            if y+1 < self.y_dim:
-                hcost = self.dist(self.grid[x-1][y+1][z], end)
-                self.grid[x-1][y+1][z].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x-1][y+1][z])
-        if x+1 < self.x_dim:
-            if y-1>=0:
-                hcost = self.dist(self.grid[x+1][y-1][z], end)
-                self.grid[x+1][y-1][z].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x+1][y-1][z])
-            if y+1 < self.y_dim:
-                hcost = self.dist(self.grid[x+1][y+1][z], end)
-                self.grid[x+1][y+1][z].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x+1][y+1][z])
-        
-        gcost = (self.dx**2+self.dz**2)**0.5
-        if x-1 >=0:
-            if z-1>=0:
-                hcost = self.dist(self.grid[x-1][y][z-1], end)
-                self.grid[x-1][y][z-1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x-1][y][z-1])
-            if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x-1][y][z+1], end)
-                self.grid[x-1][y][z+1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x-1][y][z+1])
-        if x+1<self.x_dim:
-            if z-1>=0:
-                hcost = self.dist(self.grid[x+1][y][z-1], end)
-                self.grid[x+1][y][z-1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x+1][y][z-1])
-            if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x+1][y][z+1], end)
-                self.grid[x+1][y][z+1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x+1][y][z+1])
-        
-        gcost = (self.dy**2+self.dz**2)**0.5
-        if y-1>=0:
-            if z-1>=0:
-                hcost = self.dist(self.grid[x][y-1][z-1], end)
-                self.grid[x][y-1][z-1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x][y-1][z-1])
-            if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y-1][z+1], end)
-                self.grid[x][y-1][z+1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x][y-1][z+1])
-        if y+1<self.y_dim:
-            if z-1>=0:
-                hcost = self.dist(self.grid[x][y+1][z-1], end)
-                self.grid[x][y+1][z-1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x][y+1][z-1])
-            if z+1<self.z_dim:
-                hcost = self.dist(self.grid[x][y+1][z+1], end)
-                self.grid[x][y+1][z+1].open_node(gcost, hcost, n)
-                opened_nodes.append(self.grid[x][y+1][z+1])
-
-        #Explore corners
-        gcost = (self.dx**2+self.dy**2+self.dz**2)**0.5
-        if x+1<self.x_dim:
-            if y+1<self.y_dim:
-                if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x+1][y+1][z+1], end)
-                    self.grid[x+1][y+1][z+1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x+1][y+1][z+1])
-                if z-1>=0:
-                    hcost = self.dist(self.grid[x+1][y+1][z-1], end)
-                    self.grid[x+1][y+1][z-1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x+1][y+1][z-1])
-            if y-1>=0:
-                if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x+1][y-1][z+1], end)
-                    self.grid[x+1][y-1][z+1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x+1][y-1][z+1])
-                if z-1>=0:
-                    hcost = self.dist(self.grid[x+1][y-1][z-1], end)
-                    self.grid[x+1][y-1][z-1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x+1][y-1][z-1])
-        if x-1>=0:
-            if y+1<self.y_dim:
-                if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x-1][y+1][z+1], end)
-                    self.grid[x-1][y+1][z+1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x-1][y+1][z+1])
-                if z-1>=0:
-                    hcost = self.dist(self.grid[x-1][y+1][z-1], end)
-                    self.grid[x-1][y+1][z-1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x-1][y+1][z-1])
-            if y-1>=0:
-                if z+1<self.z_dim:
-                    hcost = self.dist(self.grid[x-1][y-1][z+1], end)
-                    self.grid[x-1][y-1][z+1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x-1][y-1][z+1])
-                if z-1>=0:
-                    hcost = self.dist(self.grid[x-1][y-1][z-1], end)
-                    self.grid[x-1][y-1][z-1].open_node(gcost, hcost, n)
-                    opened_nodes.append(self.grid[x-1][y-1][z-1])
-        n.close_me()
-        return(opened_nodes)
-
+            new = node(si.col_vec([x,y,z+1]))
+            exists = self.check_existence(new)
+            if exists == False:
+                hcost = self.dist(new, end)
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
+                
+    def sort_nodes(self):
+        self.open_nodes.sort(key=lambda x: x.fcost, reverse=False)
+                
 def generate_obstacle(obstacle, o_list):
     '''Initialize an obstacle and append it to the list of obstacles.'''
     o_list.append(obstacle)
@@ -240,31 +173,11 @@ def generate_path(start, goal, *obstacles):
     start_h_cost = w_env.dist(start_node, goal_node)
 
     start_node.open_node(0, start_h_cost, parent=None)
-    
-    open_nodes = [] # nodes to be evaluated
-    newly_open = w_env.close_node(start_node, goal_node)
-    
-    for n in newly_open:
-        open_nodes.append(n)
-        n.print_node()
 
-    print("\n\n\n")    
-    closed_nodes = [start_node] # nodes that have already been evaluated
-    
     while path_complete == False:
-        open_nodes.sort(key=lambda x: x.fcost, reverse=False)
-        current=open_nodes.pop(0)
-        newly_open = w_env.close_node(current, goal_node)
-        for n in newly_open:
-            if n.closed == False and n.opened == False:
-                n.open_me()
-                open_nodes.append(n)
-                
-            if n.hcost < epsilon:
-                path_complete=True
-        for n in open_nodes:
-            n.print_node()
-        closed_nodes.append(current)
+        w_env.sort_nodes()
+        
+        
             
             
     
