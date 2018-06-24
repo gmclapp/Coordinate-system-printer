@@ -60,12 +60,12 @@ class work_envelope():
         self.dz = dz
         
         self.grid = []
-        for k in range(z_dim):
+        for k in range(x_dim):
             column = []
             for j in range(y_dim):
                 row = []
-                for i in range(x_dim):
-                    #print("Adding node: (",i,',',j,',',k,')',sep='')
+                for i in range(z_dim):
+                    print("Adding node: (",i,',',j,',',k,')',sep='')
                     row.append(node(si.col_vec([i*dx,j*dy,k*dz])))
                 column.append(row)
             self.grid.append(column)
@@ -230,6 +230,7 @@ def generate_path(start, goal, *obstacles):
     '''This function generates a path given a starting location, a goal
     location, and an arbitrary number of obstacles.'''
 
+    epsilon = 0.25
     w_env = work_envelope(3, 3, 4)
     
     path_complete = False
@@ -261,10 +262,10 @@ def generate_path(start, goal, *obstacles):
         newly_open = w_env.close_node(current, goal_node)
         for n in newly_open:
             open_nodes.append(n)
+            if n.hcost < epsilon:
+                path_complete=True
             n.print_node()
         closed_nodes.append(current)
-        
-        path_complete=True
             
             
     
