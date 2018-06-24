@@ -71,6 +71,7 @@ class work_envelope():
             match = True
         else:
             match = False
+        return(match)
 
     def check_existence(self, n):
         exists = False
@@ -80,13 +81,16 @@ class work_envelope():
                 break
             else:
                 pass
-        if not exists:
+##        if not exists:
+##            print("That node doesn't exist in open_nodes.")
             for elem in self.closed_nodes:
                 exists = self.check_match(elem, n)
                 if exists:
                     break
                 else:
                     pass
+##            if not exists:
+##                print("That node doesn't exist in closed_nodes either.")
         return exists
     
     def close_node(self, n, end):
@@ -94,13 +98,16 @@ class work_envelope():
         x = n.loc.x
         y = n.loc.y
         z = n.loc.z
-
+##        print("X: ",x, "Y: ", y, "Z: ", z)
+##        print("X_dim: ",self.x_dim, "Y_dim: ", self.y_dim, "Z_dim: ", self.z_dim)
+        
         # Explore x dimension
         gcost = self.dx
         if x-1 >= 0:
             new = node(si.col_vec([x-1,y,z]))
             exists = self.check_existence(new)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
@@ -108,6 +115,7 @@ class work_envelope():
             new = node(si.col_vec([x+1,y,z]))
             exists = self.check_existence(new)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
@@ -118,13 +126,17 @@ class work_envelope():
             new = node(si.col_vec([x,y-1,z]))
             exists = self.check_existence(new)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
         if y+1 < self.y_dim:
+##            print("Execution should get this far.")
             new = node(si.col_vec([x,y+1,z]))
             exists = self.check_existence(new)
+##            print("Exists: ", exists)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
@@ -135,6 +147,7 @@ class work_envelope():
             new = node(si.col_vec([x,y,z-1]))
             exists = self.check_existence(new)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
@@ -142,6 +155,7 @@ class work_envelope():
             new = node(si.col_vec([x,y,z+1]))
             exists = self.check_existence(new)
             if exists == False:
+##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
@@ -173,10 +187,13 @@ def generate_path(start, goal, *obstacles):
     start_h_cost = w_env.dist(start_node, goal_node)
 
     start_node.open_node(0, start_h_cost, parent=None)
+    w_env.open_nodes.append(start_node)
 
     while path_complete == False:
         w_env.sort_nodes()
-        
+        w_env.close_node(w_env.open_nodes[0], goal_node)
+        for elem in w_env.open_nodes:
+            elem.print_node()
         
             
             
