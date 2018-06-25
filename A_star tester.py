@@ -1,5 +1,6 @@
 import sanitize_inputs as si
 import A_star
+import time
 
 def manual_entry():
     print("Enter the coordinates of the obstacle.")
@@ -32,25 +33,29 @@ def auto_entry():
 
     return(obst, start, end, n)
 
+t0 = time.time()
+
 obst, start, end, n = auto_entry()
 
-print("Cool obstacle!\nIt is located at:\nX: ",
-      obst.loc.x,"\n",
-      "Y: ", obst.loc.y,"\n",
-      "Z: ", obst.loc.z,"\n",
-      "It has a radius:\nR: ", obst.r,"\n",
-      "It has a height:\nh: ", obst.h,"\n", sep='')
-
-print("Thanks, the robot gripper will start at:\nX: ",
-      start.loc.x,"\n",
-      "Y: ", start.loc.y,"\n",
-      "Z: ", start.loc.z,"\n",sep='')
-
-print("Ok, the payload will be retreived from:\nX: ",
-      end.loc.x,"\n",
-      "Y: ", end.loc.y,"\n",
-      "Z: ", end.loc.z,"\n",sep='')
+##print("Cool obstacle!\nIt is located at:\nX: ",
+##      obst.loc.x,"\n",
+##      "Y: ", obst.loc.y,"\n",
+##      "Z: ", obst.loc.z,"\n",
+##      "It has a radius:\nR: ", obst.r,"\n",
+##      "It has a height:\nh: ", obst.h,"\n", sep='')
+##
+##print("Thanks, the robot gripper will start at:\nX: ",
+##      start.loc.x,"\n",
+##      "Y: ", start.loc.y,"\n",
+##      "Z: ", start.loc.z,"\n",sep='')
+##
+##print("Ok, the payload will be retreived from:\nX: ",
+##      end.loc.x,"\n",
+##      "Y: ", end.loc.y,"\n",
+##      "Z: ", end.loc.z,"\n",sep='')
     
 obst.collision_detect(start)
 
 path = A_star.generate_path(start, end, obst)
+t1 = time.time()
+print("Time: ",t1-t0)
