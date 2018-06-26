@@ -23,6 +23,7 @@ class node():
         self.loc = location
 
     def open_node(self, gcost, hcost, parent=None):
+        self.parent = parent
         if parent != None:
             self.parent_g_cost = parent.gcost
         else:
@@ -199,15 +200,21 @@ def generate_path(start, goal, *obstacles):
             w_env.sort_nodes()
             if w_env.check_match(w_env.open_nodes[0], goal_node):
                 print("Found the end.")
+                path = [w_env.open_nodes[0]]
+                while (path[-1].parent != None):
+                    path.append(path[-1].parent)
+                    
+                print("Finished the path")
                 break
+            
             w_env.close_node(w_env.open_nodes[0], goal_node)
-##            print("Open nodes: ", len(w_env.open_nodes))
-##            print("Closed nodes: ", len(w_env.closed_nodes))
-##            for elem in w_env.open_nodes:
-##                elem.print_node()
+            print("Open nodes: ", len(w_env.open_nodes))
+            print("Closed nodes: ", len(w_env.closed_nodes))
+            
     except IndexError:
         print("All nodes opened.")
-        
+    for elem in path:
+                elem.print_node()
         
             
             
