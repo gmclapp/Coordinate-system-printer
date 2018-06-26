@@ -83,7 +83,6 @@ class work_envelope():
         for elem in self.open_nodes:
             exists = self.check_match(elem, n)
             if exists:
-                print("That node already exists.")
                 break
             else:
                 pass
@@ -111,7 +110,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
         if x+1 < self.x_dim:
             new = node(si.col_vec([x+1,y,z]))
             exists = self.check_existence(new)
@@ -120,7 +119,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
 
         # Explore y dimension
         gcost = self.dy
@@ -132,7 +131,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
         if y+1 < self.y_dim:
             new = node(si.col_vec([x,y+1,z]))
             exists = self.check_existence(new)
@@ -141,7 +140,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
                 
         # Explore z dimension
         gcost = self.dz
@@ -153,7 +152,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
         if z+1 < self.z_dim:
             new = node(si.col_vec([x,y,z+1]))
             exists = self.check_existence(new)
@@ -162,7 +161,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
-                print("That node already exists.")
+                pass
                 
         self.closed_nodes.append(self.open_nodes.pop(0))
                 
@@ -198,8 +197,8 @@ def generate_path(start, goal, *obstacles):
     while path_complete == False:
         w_env.sort_nodes()
         w_env.close_node(w_env.open_nodes[0], goal_node)
-##        print("Open nodes: ", len(w_env.open_nodes))
-##        print("Closed nodes: ", len(w_env.closed_nodes))
+        print("Open nodes: ", len(w_env.open_nodes))
+        print("Closed nodes: ", len(w_env.closed_nodes))
 ##        for elem in w_env.open_nodes:
 ##            elem.print_node()
         
