@@ -24,10 +24,8 @@ class node():
 
     def open_node(self, gcost, hcost, parent=None):
         if parent != None:
-            #print("This node has a parent!")
             self.parent_g_cost = parent.gcost
         else:
-            #print("This node has no parent node. It's g-cost is zero")
             self.parent_g_cost = 0
 
         self.gcost = self.parent_g_cost + gcost
@@ -67,30 +65,34 @@ class work_envelope():
         return(d)
 
     def check_match(self, n1, n2):
-        if n1.loc == n2.loc:
+        '''This function checks whether the coordinates of two given nodes
+        match, and thereby whether one is a duplicate of the other.'''
+        if (n1.loc.x == n2.loc.x
+            and n1.loc.y == n2.loc.y
+            and n1.loc.z == n2.loc.z):
+            
             match = True
         else:
             match = False
         return(match)
 
     def check_existence(self, n):
+        '''This function checks for the existence of a given node, n,
+        in the open_nodes and closed_nodes lists.'''
         exists = False
         for elem in self.open_nodes:
             exists = self.check_match(elem, n)
             if exists:
+                print("That node already exists.")
                 break
             else:
                 pass
-##        if not exists:
-##            print("That node doesn't exist in open_nodes.")
             for elem in self.closed_nodes:
                 exists = self.check_match(elem, n)
                 if exists:
                     break
                 else:
                     pass
-##            if not exists:
-##                print("That node doesn't exist in closed_nodes either.")
         return exists
     
     def close_node(self, n, end):
@@ -98,27 +100,27 @@ class work_envelope():
         x = n.loc.x
         y = n.loc.y
         z = n.loc.z
-##        print("X: ",x, "Y: ", y, "Z: ", z)
-##        print("X_dim: ",self.x_dim, "Y_dim: ", self.y_dim, "Z_dim: ", self.z_dim)
-        
+
         # Explore x dimension
         gcost = self.dx
         if x-1 >= 0:
             new = node(si.col_vec([x-1,y,z]))
             exists = self.check_existence(new)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
         if x+1 < self.x_dim:
             new = node(si.col_vec([x+1,y,z]))
             exists = self.check_existence(new)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
 
         # Explore y dimension
         gcost = self.dy
@@ -126,20 +128,20 @@ class work_envelope():
             new = node(si.col_vec([x,y-1,z]))
             exists = self.check_existence(new)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
         if y+1 < self.y_dim:
-##            print("Execution should get this far.")
             new = node(si.col_vec([x,y+1,z]))
             exists = self.check_existence(new)
-##            print("Exists: ", exists)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
                 
         # Explore z dimension
         gcost = self.dz
@@ -147,18 +149,22 @@ class work_envelope():
             new = node(si.col_vec([x,y,z-1]))
             exists = self.check_existence(new)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
         if z+1 < self.z_dim:
             new = node(si.col_vec([x,y,z+1]))
             exists = self.check_existence(new)
             if exists == False:
-##                print("Creating new node.")
                 hcost = self.dist(new, end)
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+            else:
+                print("That node already exists.")
+                
+        self.closed_nodes.append(self.open_nodes.pop(0))
                 
     def sort_nodes(self):
         self.open_nodes.sort(key=lambda x: x.fcost, reverse=False)
@@ -192,8 +198,10 @@ def generate_path(start, goal, *obstacles):
     while path_complete == False:
         w_env.sort_nodes()
         w_env.close_node(w_env.open_nodes[0], goal_node)
-        for elem in w_env.open_nodes:
-            elem.print_node()
+##        print("Open nodes: ", len(w_env.open_nodes))
+##        print("Closed nodes: ", len(w_env.closed_nodes))
+##        for elem in w_env.open_nodes:
+##            elem.print_node()
         
             
             
