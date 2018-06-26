@@ -194,13 +194,20 @@ def generate_path(start, goal, *obstacles):
     start_node.open_node(0, start_h_cost, parent=None)
     w_env.open_nodes.append(start_node)
 
-    while path_complete == False:
-        w_env.sort_nodes()
-        w_env.close_node(w_env.open_nodes[0], goal_node)
-        print("Open nodes: ", len(w_env.open_nodes))
-        print("Closed nodes: ", len(w_env.closed_nodes))
-##        for elem in w_env.open_nodes:
-##            elem.print_node()
+    try:
+        while path_complete == False:
+            w_env.sort_nodes()
+            if w_env.check_match(w_env.open_nodes[0], goal_node):
+                print("Found the end.")
+                break
+            w_env.close_node(w_env.open_nodes[0], goal_node)
+##            print("Open nodes: ", len(w_env.open_nodes))
+##            print("Closed nodes: ", len(w_env.closed_nodes))
+##            for elem in w_env.open_nodes:
+##                elem.print_node()
+    except IndexError:
+        print("All nodes opened.")
+        
         
             
             

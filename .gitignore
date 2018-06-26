@@ -6,3 +6,4 @@ robotics_sympy.py
 *.pyc
 *.STL
 *.STEP
+*.pyc
