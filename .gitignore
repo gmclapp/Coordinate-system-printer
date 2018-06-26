@@ -4,3 +4,4 @@ log.txt
 Exam 1.py
 robotics_sympy.py
 __pycache__/robotics_sympy.cpython-36.pyc
+*.pyc
