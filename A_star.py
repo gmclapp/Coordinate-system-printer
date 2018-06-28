@@ -58,6 +58,8 @@ class work_envelope():
         self.open_nodes = []
         self.closed_nodes = []
 
+        self.obstacles = []
+
     def dist(self,n1, n2):
         d = (((n1.loc.x-n2.loc.x)*self.dx)**2
              + ((n1.loc.y-n2.loc.y)*self.dy)**2
@@ -94,7 +96,15 @@ class work_envelope():
                 else:
                     pass
         return exists
-    
+
+    def check_collision(self, node):
+        for o in self.obstacles:
+            collides = o.collision_detect(node)
+            if collides:
+                print("Collision!")
+                break
+        return(collides)
+        
     def close_node(self, n, end):
         # temporary variables for current node
         x = n.loc.x
@@ -108,6 +118,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -117,6 +129,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -129,6 +143,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -138,6 +154,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -150,6 +168,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -159,6 +179,8 @@ class work_envelope():
             exists = self.check_existence(new)
             if exists == False:
                 hcost = self.dist(new, end)
+                if (self.check_collision(new)):
+                    gcost = float('Inf')
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -169,10 +191,10 @@ class work_envelope():
     def sort_nodes(self):
         self.open_nodes.sort(key=lambda x: x.fcost, reverse=False)
                 
-def generate_obstacle(obstacle, o_list):
-    '''Initialize an obstacle and append it to the list of obstacles.'''
-    o_list.append(obstacle)
-    return(o_list)
+    def generate_obstacle(self, obstacle):
+        '''Append an obstacle to the work envelope's list of obstacles.'''
+        self.obstacles.append(obstacle)
+        
 
 def generate_path(start, goal, *obstacles):
     '''This function generates a path given a starting location, a goal
@@ -183,10 +205,8 @@ def generate_path(start, goal, *obstacles):
     
     path_complete = False
     
-    o_list = []
-    
     for o in obstacles:
-        o_list = generate_obstacle(o, o_list)
+        w_env.generate_obstacle(o)
 
     start_node = start
     goal_node = goal
@@ -205,16 +225,18 @@ def generate_path(start, goal, *obstacles):
                     path.append(path[-1].parent)
                     
                 print("Finished the path")
+                print("Opened",len(w_env.open_nodes),"nodes.")
+                print("Closed",len(w_env.closed_nodes),"nodes.")
                 break
             
             w_env.close_node(w_env.open_nodes[0], goal_node)
-            print("Open nodes: ", len(w_env.open_nodes))
-            print("Closed nodes: ", len(w_env.closed_nodes))
+##            print("Open nodes: ", len(w_env.open_nodes))
+##            print("Closed nodes: ", len(w_env.closed_nodes))
             
     except IndexError:
         print("All nodes opened.")
-    for elem in path:
-                elem.print_node()
+##    for elem in path:
+##                elem.print_node()
         
             
             
