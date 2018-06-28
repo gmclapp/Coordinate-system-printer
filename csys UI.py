@@ -4,6 +4,7 @@ import sanitize_inputs as si
 red = (1,0,0)
 blue = (0,0,1)
 green = (0,1,0)
+some_other_color = (0.25,0.5,0.75)
 
 csys_list = []
 
@@ -20,5 +21,9 @@ csys_list.append(A)
 B = pa.csys('B', pa.get_DH_T(), A)
 B.set_color(green)
 csys_list.append(B)
+
+C = pa.csys('C', pa.get_T(), root)
+C.set_color(some_other_color)
+csys_list.append(C)
 
 pa.plot_csys(csys_list)
