@@ -179,7 +179,7 @@ def generate_path(start, goal, *obstacles):
     location, and an arbitrary number of obstacles.'''
 
     epsilon = 0.25
-    w_env = work_envelope(3, 3, 4)
+    w_env = work_envelope(10, 10, 10)
     
     path_complete = False
     

@@ -19,15 +19,15 @@ def manual_entry():
     n = si.get_integer("Enter the approximate number of nodes along the path. >>> ", lower = 0)
     
 def auto_entry():
-    o_pos = si.col_vec([2,2,0])
-    o_r = 2.5
+    o_pos = si.col_vec([2,2,2])
+    o_r = 1.0
     o_h = float('Inf')
 
     obst = A_star.obstacle(o_pos, o_r, o_h)
 
     start = A_star.node(si.col_vec([0,0,0]))
 
-    end = A_star.node(si.col_vec([2,2,3]))
+    end = A_star.node(si.col_vec([5,5,5]))
 
     n = 25
 
