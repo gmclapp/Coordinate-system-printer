@@ -9,11 +9,12 @@ class obstacle():
     def collision_detect(self, point):
         '''This function accepts a column vector and checks if it collides with
         the obstacle object.'''
-        d = (self.loc.x-point.loc.x)**2 # This will not run, just outlining.
+        d = (self.loc.x-point.loc.x)**2 
         + (self.loc.y-point.loc.y)**2
         + (self.loc.z-point.loc.z)**2
 
-        if (self.loc.z <= point.loc.z <= self.loc.z + self.h) and d <= self.r**2:
+        if ((self.loc.z <= point.loc.z <= self.loc.z + self.h)
+            and d <= self.r**2):
             return(True)
         else:
             return(False)
@@ -111,12 +112,12 @@ class work_envelope():
         if exists == False:
             hcost = self.dist(new, end)
             if (self.check_collision(new)):
-                gcost = float('Inf')
-                
-            new.open_node(gcost, hcost, n)
-            self.open_nodes.append(new)
+                self.closed_nodes.append(new)
+            else:
+                new.open_node(gcost, hcost, n)
+                self.open_nodes.append(new)
         else:
-            pass
+            pass # check here if new gcost is lower than old. If so, replace.
             
     def close_node(self, n, end):
         # temporary variables for current node
@@ -204,7 +205,7 @@ def generate_path(start, goal, *obstacles):
     except IndexError:
         print("All nodes opened.")
     for elem in path:
-                elem.print_node()
+        elem.print_node()
         
             
             
