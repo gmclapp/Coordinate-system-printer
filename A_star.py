@@ -206,8 +206,8 @@ def generate_path(start, goal, *obstacles):
             
     except IndexError:
         print("All nodes opened.")
-    for elem in path:
-        elem.print_node()
+##    for elem in path:
+##        elem.print_node()
         
             
             

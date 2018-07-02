@@ -17,7 +17,9 @@ def manual_entry():
     end = A_star.node(si.get_coords())
 
     n = si.get_integer("Enter the approximate number of nodes along the path. >>> ", lower = 0)
-    
+
+    return(obst, start, end, n)
+
 def auto_entry():
     o_pos = si.col_vec([2,2,0])
     o_r = 1.1
@@ -34,9 +36,10 @@ def auto_entry():
 
     return(obst, start, end, n)
 
-t0 = time.time()
 
-obst, start, end, n = auto_entry()
+
+##obst, start, end, n = auto_entry()
+obst, start, end, n = manual_entry()
 
 ##print("Cool obstacle!\nIt is located at:\nX: ",
 ##      obst.loc.x,"\n",
@@ -55,10 +58,19 @@ obst, start, end, n = auto_entry()
 ##      "Y: ", end.loc.y,"\n",
 ##      "Z: ", end.loc.z,"\n",sep='')
 
-print("Checking start node")    
-obst.collision_detect(start)
+t0 = time.time()
+
+error_flag = False
+
+print("Checking path ends")    
+temp1 = obst.collision_detect(start)
+temp2 = obst.collision_detect(end)
+error_flag = temp1 or temp2
 print("Done checking.")
 
-path = A_star.generate_path(start, end, obst)
-t1 = time.time()
-print("Time: ",t1-t0)
+if not error_flag:
+    path = A_star.generate_path(start, end, obst)
+    t1 = time.time()
+    print("Time: ",t1-t0)
+else:
+    print("path end point unreachable.")
