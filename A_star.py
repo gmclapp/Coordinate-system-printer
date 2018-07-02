@@ -105,7 +105,19 @@ class work_envelope():
 ##                print("Collision!")
                 break
         return(collides)
-        
+
+    def new_node(self, gcost, new, end, n):
+        exists = self.check_existence(new)
+        if exists == False:
+            hcost = self.dist(new, end)
+            if (self.check_collision(new)):
+                gcost = float('Inf')
+                
+            new.open_node(gcost, hcost, n)
+            self.open_nodes.append(new)
+        else:
+            pass
+            
     def close_node(self, n, end):
         # temporary variables for current node
         x = n.loc.x
@@ -116,81 +128,32 @@ class work_envelope():
         gcost = self.dx
         if x-1 >= 0:
             new = node(si.col_vec([x-1,y,z]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
+            self.new_node(gcost, new, end, n)
+            
         if x+1 < self.x_dim:
             new = node(si.col_vec([x+1,y,z]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                    
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
+            self.new_node(gcost, new, end, n)
 
         # Explore y dimension
         gcost = self.dy
         if y-1 >= 0:
             new = node(si.col_vec([x,y-1,z]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                    
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
+            self.new_node(gcost, new, end, n)
+            
         if y+1 < self.y_dim:
             new = node(si.col_vec([x,y+1,z]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
+            self.new_node(gcost, new, end, n)
                 
         # Explore z dimension
         gcost = self.dz
         if z-1 >= 0:
             new = node(si.col_vec([x,y,z-1]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                    
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
+            self.new_node(gcost, new, end, n)
+            
         if z+1 < self.z_dim:
             new = node(si.col_vec([x,y,z+1]))
-            exists = self.check_existence(new)
-            if exists == False:
-                hcost = self.dist(new, end)
-                if (self.check_collision(new)):
-                    gcost = float('Inf')
-                    
-                new.open_node(gcost, hcost, n)
-                self.open_nodes.append(new)
-            else:
-                pass
-                
+            self.new_node(gcost, new, end, n)
+
         self.closed_nodes.append(self.open_nodes.pop(0))
                 
     def sort_nodes(self):
