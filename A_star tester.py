@@ -19,9 +19,10 @@ def manual_entry():
     n = si.get_integer("Enter the approximate number of nodes along the path. >>> ", lower = 0)
     
 def auto_entry():
-    o_pos = si.col_vec([2,2,2])
-    o_r = 1.0
-    o_h = float('Inf')
+    o_pos = si.col_vec([2,2,0])
+    o_r = 1.1
+##    o_h = float('Inf')
+    o_h = 50
 
     obst = A_star.obstacle(o_pos, o_r, o_h)
 
@@ -43,7 +44,7 @@ obst, start, end, n = auto_entry()
 ##      "Z: ", obst.loc.z,"\n",
 ##      "It has a radius:\nR: ", obst.r,"\n",
 ##      "It has a height:\nh: ", obst.h,"\n", sep='')
-##
+
 ##print("Thanks, the robot gripper will start at:\nX: ",
 ##      start.loc.x,"\n",
 ##      "Y: ", start.loc.y,"\n",

@@ -9,12 +9,11 @@ class obstacle():
     def collision_detect(self, point):
         '''This function accepts a column vector and checks if it collides with
         the obstacle object.'''
-        d = (self.loc.x-point.loc.x)**2 
-        + (self.loc.y-point.loc.y)**2
-        + (self.loc.z-point.loc.z)**2
-
+        d = ((self.loc.x-point.loc.x)**2 
+        + (self.loc.y-point.loc.y)**2)**0.5
+##        print("d=",d)
         if ((self.loc.z <= point.loc.z <= self.loc.z + self.h)
-            and d <= self.r**2):
+            and d <= self.r):
             return(True)
         else:
             return(False)
@@ -41,6 +40,7 @@ class node():
               "\nG-cost: ",self.gcost,
               "\nH-cost: ",self.hcost,
               "\nF-cost: ",self.fcost,sep='')
+        print("\n")
     def set_walkable(self, walk=True):
         '''If walk is True, the node is reachable, and is not blocked by an
         obstacle.'''
@@ -80,13 +80,14 @@ class work_envelope():
             match = False
         return(match)
 
-    def check_existence(self, n):
+    def check_existence(self, n, gcost):
         '''This function checks for the existence of a given node, n,
         in the open_nodes and closed_nodes lists.'''
         exists = False
         for elem in self.open_nodes:
             exists = self.check_match(elem, n)
             if exists:
+                elem.gcost = min(gcost, elem.gcost)
                 break
             else:
                 pass
@@ -103,12 +104,13 @@ class work_envelope():
         for o in self.obstacles:
             collides = o.collision_detect(node)
             if collides:
-##                print("Collision!")
+##                print("Node (",node.loc.x,",",node.loc.y,",",
+##                      node.loc.z,") collides with the obstacle.")
                 break
         return(collides)
 
     def new_node(self, gcost, new, end, n):
-        exists = self.check_existence(new)
+        exists = self.check_existence(new, gcost)
         if exists == False:
             hcost = self.dist(new, end)
             if (self.check_collision(new)):
@@ -117,7 +119,7 @@ class work_envelope():
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
         else:
-            pass # check here if new gcost is lower than old. If so, replace.
+            pass 
             
     def close_node(self, n, end):
         # temporary variables for current node
