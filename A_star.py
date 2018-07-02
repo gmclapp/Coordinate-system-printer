@@ -156,6 +156,80 @@ class work_envelope():
         new = node(si.col_vec([x,y,z+self.dz]))
         self.new_node(gcost, new, end, n)
 
+        # Explore xy diagonals
+        gcost = (self.dx**2 + self.dy**2)**0.5
+
+        new = node(si.col_vec([x-self.dx,y-self.dy,z]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x-self.dx,y+self.dy,z]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y-self.dy,z]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y+self.dy,z]))
+        self.new_node(gcost, new, end, n)
+
+        # Explore yz diagonals
+        gcost = (self.dy**2 + self.dz**2)**0.5
+
+        new = node(si.col_vec([x,y-self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x,y+self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x,y-self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x,y+self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        # Explore xz diagonals
+        gcost = (self.dx**2 + self.dz**2)**0.5
+
+        new = node(si.col_vec([x-self.dx,y,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x-self.dx,y,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        # Explore corners
+        gcost = (self.dx**2 + self.dy**2 + self.dz**2)**0.5
+
+        new = node(si.col_vec([x-self.dx,y-self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x-self.dx,y-self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x-self.dx,y+self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x-self.dx,y+self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y-self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y-self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y+self.dy,z-self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))
+        self.new_node(gcost, new, end, n)
+
+        
+        
         self.closed_nodes.append(self.open_nodes.pop(0))
                 
     def sort_nodes(self):
@@ -205,8 +279,8 @@ def generate_path(start, goal, *obstacles):
             
     except IndexError:
         print("All nodes opened.")
-    for elem in path:
-        elem.print_node()
+##    for elem in path:
+##        elem.print_node()
         
             
             
