@@ -30,7 +30,7 @@ def auto_entry():
 
     start = A_star.node(si.col_vec([0,0,0]))
 
-    end = A_star.node(si.col_vec([5,5,5]))
+    end = A_star.node(si.col_vec([-5,5,5]))
 
     n = 25
 
@@ -38,8 +38,8 @@ def auto_entry():
 
 
 
-##obst, start, end, n = auto_entry()
-obst, start, end, n = manual_entry()
+obst, start, end, n = auto_entry()
+##obst, start, end, n = manual_entry()
 
 ##print("Cool obstacle!\nIt is located at:\nX: ",
 ##      obst.loc.x,"\n",

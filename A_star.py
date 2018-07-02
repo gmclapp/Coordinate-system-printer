@@ -71,9 +71,11 @@ class work_envelope():
     def check_match(self, n1, n2):
         '''This function checks whether the coordinates of two given nodes
         match, and thereby whether one is a duplicate of the other.'''
-        if (n1.loc.x == n2.loc.x
-            and n1.loc.y == n2.loc.y
-            and n1.loc.z == n2.loc.z):
+        epsilon = 0.01
+        
+        if (abs(n1.loc.x - n2.loc.x) < epsilon
+            and abs(n1.loc.y - n2.loc.y) < epsilon
+            and abs(n1.loc.z - n2.loc.z) < epsilon):
             
             match = True
         else:
@@ -129,33 +131,30 @@ class work_envelope():
 
         # Explore x dimension
         gcost = self.dx
-        if x-1 >= 0:
-            new = node(si.col_vec([x-1,y,z]))
-            self.new_node(gcost, new, end, n)
+        
+        new = node(si.col_vec([x-self.dx,y,z]))
+        self.new_node(gcost, new, end, n)
             
-        if x+1 < self.x_dim:
-            new = node(si.col_vec([x+1,y,z]))
-            self.new_node(gcost, new, end, n)
+        new = node(si.col_vec([x+self.dx,y,z]))
+        self.new_node(gcost, new, end, n)
 
         # Explore y dimension
         gcost = self.dy
-        if y-1 >= 0:
-            new = node(si.col_vec([x,y-1,z]))
-            self.new_node(gcost, new, end, n)
-            
-        if y+1 < self.y_dim:
-            new = node(si.col_vec([x,y+1,z]))
-            self.new_node(gcost, new, end, n)
+        
+        new = node(si.col_vec([x,y-self.dy,z]))
+        self.new_node(gcost, new, end, n)
+
+        new = node(si.col_vec([x,y+self.dy,z]))
+        self.new_node(gcost, new, end, n)
                 
         # Explore z dimension
         gcost = self.dz
-        if z-1 >= 0:
-            new = node(si.col_vec([x,y,z-1]))
-            self.new_node(gcost, new, end, n)
+        
+        new = node(si.col_vec([x,y,z-self.dz]))
+        self.new_node(gcost, new, end, n)
             
-        if z+1 < self.z_dim:
-            new = node(si.col_vec([x,y,z+1]))
-            self.new_node(gcost, new, end, n)
+        new = node(si.col_vec([x,y,z+self.dz]))
+        self.new_node(gcost, new, end, n)
 
         self.closed_nodes.append(self.open_nodes.pop(0))
                 
@@ -172,7 +171,7 @@ def generate_path(start, goal, *obstacles):
     location, and an arbitrary number of obstacles.'''
 
     epsilon = 0.25
-    w_env = work_envelope(10, 10, 10)
+    w_env = work_envelope(1, 1, 1, 0.5, 0.5, 0.5)
     
     path_complete = False
     
@@ -206,8 +205,8 @@ def generate_path(start, goal, *obstacles):
             
     except IndexError:
         print("All nodes opened.")
-##    for elem in path:
-##        elem.print_node()
+    for elem in path:
+        elem.print_node()
         
             
             
