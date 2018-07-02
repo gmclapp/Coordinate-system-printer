@@ -13,7 +13,7 @@ class obstacle():
         + (self.loc.y-point.loc.y)**2
         + (self.loc.z-point.loc.z)**2
 
-        if (self.loc.z <= point.loc.z <= self.loc.z + self.h) and d <= self.r:
+        if (self.loc.z <= point.loc.z <= self.loc.z + self.h) and d <= self.r**2:
             return(True)
         else:
             return(False)
@@ -98,10 +98,11 @@ class work_envelope():
         return exists
 
     def check_collision(self, node):
+        collides = False
         for o in self.obstacles:
             collides = o.collision_detect(node)
             if collides:
-                print("Collision!")
+##                print("Collision!")
                 break
         return(collides)
         
@@ -131,6 +132,7 @@ class work_envelope():
                 hcost = self.dist(new, end)
                 if (self.check_collision(new)):
                     gcost = float('Inf')
+                    
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -145,6 +147,7 @@ class work_envelope():
                 hcost = self.dist(new, end)
                 if (self.check_collision(new)):
                     gcost = float('Inf')
+                    
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -170,6 +173,7 @@ class work_envelope():
                 hcost = self.dist(new, end)
                 if (self.check_collision(new)):
                     gcost = float('Inf')
+                    
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -181,6 +185,7 @@ class work_envelope():
                 hcost = self.dist(new, end)
                 if (self.check_collision(new)):
                     gcost = float('Inf')
+                    
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
             else:
@@ -235,8 +240,8 @@ def generate_path(start, goal, *obstacles):
             
     except IndexError:
         print("All nodes opened.")
-##    for elem in path:
-##                elem.print_node()
+    for elem in path:
+                elem.print_node()
         
             
             

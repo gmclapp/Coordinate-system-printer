@@ -53,8 +53,10 @@ obst, start, end, n = auto_entry()
 ##      end.loc.x,"\n",
 ##      "Y: ", end.loc.y,"\n",
 ##      "Z: ", end.loc.z,"\n",sep='')
-    
+
+print("Checking start node")    
 obst.collision_detect(start)
+print("Done checking.")
 
 path = A_star.generate_path(start, end, obst)
 t1 = time.time()
