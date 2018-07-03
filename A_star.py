@@ -1,10 +1,21 @@
 import sanitize_inputs as si
-
+import numpy as np
+    
 class obstacle():
     def __init__(self, location, radius, height=float('Inf')):
         self.loc = location
         self.r = radius
         self.h = height
+        self.d = (self.loc.x**2+self.loc.y**2)**0.5
+
+        #The following calculates the angular 'shadow' cast by the object
+        self.beta = np.arctan2(self.loc.y, self.loc.x)
+##        print("The obstacle is at ",self.beta*180/3.1415,"degrees")
+        self.theta = np.arcsin(self.r/self.d)
+##        print("+/-",self.theta*180/3.1415,"degrees")
+        
+        self.angle1 = self.beta + self.theta
+        self.angle2 = self.beta - self.theta
 
     def collision_detect(self, point):
         '''This function accepts a column vector and checks if it collides with
@@ -14,6 +25,16 @@ class obstacle():
 ##        print("d=",d)
         if ((self.loc.z <= point.loc.z <= self.loc.z + self.h)
             and d <= self.r):
+            return(True)
+        else:
+            return(False)
+
+    def robot_collision_detect(self, point):
+        d = ((point.loc.x)**2
+             + ((point.loc.y))**2)**0.5
+
+        beta = np.arctan2(point.loc.y, point.loc.x)
+        if d >= self.d - self.r and self.angle2 < beta < self.angle1:
             return(True)
         else:
             return(False)
@@ -62,9 +83,9 @@ class work_envelope():
         self.obstacles = []
 
     def dist(self,n1, n2):
-        d = (((n1.loc.x-n2.loc.x)*self.dx)**2
-             + ((n1.loc.y-n2.loc.y)*self.dy)**2
-             + ((n1.loc.z-n2.loc.z)*self.dz)**2)**0.5
+        d = (((n1.loc.x-n2.loc.x))**2
+             + ((n1.loc.y-n2.loc.y))**2
+             + ((n1.loc.z-n2.loc.z))**2)**0.5
 
         return(d)
 
@@ -104,7 +125,7 @@ class work_envelope():
     def check_collision(self, node):
         collides = False
         for o in self.obstacles:
-            collides = o.collision_detect(node)
+            collides = o.robot_collision_detect(node)
             if collides:
 ##                print("Node (",node.loc.x,",",node.loc.y,",",
 ##                      node.loc.z,") collides with the obstacle.")
