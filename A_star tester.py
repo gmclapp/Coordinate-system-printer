@@ -32,7 +32,7 @@ def auto_entry():
 
     end = A_star.node(si.col_vec([5,1,0]))
 
-    n = 10
+    n = 25
 
     return(obst, start, end, n)
 
