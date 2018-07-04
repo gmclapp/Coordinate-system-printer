@@ -30,9 +30,9 @@ def auto_entry():
 
     start = A_star.node(si.col_vec([0,0,0]))
 
-    end = A_star.node(si.col_vec([-5,5,5]))
+    end = A_star.node(si.col_vec([10.5,10.5,5]))
 
-    n = 25
+    n = 14
 
     return(obst, start, end, n)
 
@@ -69,7 +69,7 @@ error_flag = temp1 or temp2
 print("Done checking.")
 
 if not error_flag:
-    path = A_star.generate_path(start, end, obst)
+    path = A_star.generate_path(start, end, n, obst)
     t1 = time.time()
     print("Time: ",t1-t0)
 else:

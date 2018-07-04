@@ -240,12 +240,16 @@ class work_envelope():
         self.obstacles.append(obstacle)
         
 
-def generate_path(start, goal, *obstacles):
+def generate_path(start, goal, n, *obstacles):
     '''This function generates a path given a starting location, a goal
     location, and an arbitrary number of obstacles.'''
 
     epsilon = 0.25
-    w_env = work_envelope(1, 1, 1, 0.5, 0.5, 0.5)
+    dx = abs(goal.loc.x-start.loc.x)/n
+    dy = abs(goal.loc.y-start.loc.y)/n
+    dz = abs(goal.loc.z-start.loc.z)/n
+    print("dx: ",dx,"dy: ",dy,"dz: ",dz,sep='')
+    w_env = work_envelope(1, 1, 1, dx, dy, dz)
     
     path_complete = False
     
