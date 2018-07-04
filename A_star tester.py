@@ -28,15 +28,13 @@ def auto_entry():
 
     obst = A_star.obstacle(o_pos, o_r, o_h)
 
-    start = A_star.node(si.col_vec([0,0,0]))
+    start = A_star.node(si.col_vec([0,5,0]))
 
-    end = A_star.node(si.col_vec([10.5,10.5,5]))
+    end = A_star.node(si.col_vec([5,1,0]))
 
-    n = 14
+    n = 10
 
     return(obst, start, end, n)
-
-
 
 obst, start, end, n = auto_entry()
 ##obst, start, end, n = manual_entry()
