@@ -10,9 +10,7 @@ class obstacle():
 
         #The following calculates the angular 'shadow' cast by the object
         self.beta = np.arctan2(self.loc.y, self.loc.x)
-##        print("The obstacle is at ",self.beta*180/3.1415,"degrees")
         self.theta = np.arcsin(self.r/self.d)
-##        print("+/-",self.theta*180/3.1415,"degrees")
         
         self.angle1 = self.beta + self.theta
         self.angle2 = self.beta - self.theta
@@ -22,7 +20,6 @@ class obstacle():
         the obstacle object.'''
         d = ((self.loc.x-point.loc.x)**2 
         + (self.loc.y-point.loc.y)**2)**0.5
-##        print("d=",d)
         if ((self.loc.z <= point.loc.z <= self.loc.z + self.h)
             and d <= self.r):
             return(True)
@@ -127,8 +124,6 @@ class work_envelope():
         for o in self.obstacles:
             collides = o.robot_collision_detect(node)
             if collides:
-##                print("Node (",node.loc.x,",",node.loc.y,",",
-##                      node.loc.z,") collides with the obstacle.")
                 break
         return(collides)
 
@@ -248,9 +243,7 @@ class work_envelope():
 
         new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))
         self.new_node(gcost, new, end, n)
-
-        
-        
+    
         self.closed_nodes.append(self.open_nodes.pop(0))
                 
     def sort_nodes(self):
@@ -304,8 +297,13 @@ def generate_path(start, goal, n, *obstacles):
             
     except IndexError:
         print("All nodes opened.")
-##    for elem in path:
+
+    path_mat = np.array([goal_node.loc.x, goal_node.loc.y, goal_node.loc.z])
+    
+    for elem in path:
+        path_mat = np.row_stack([[elem.loc.x, elem.loc.y, elem.loc.z], path_mat])
 ##        elem.print_node()
+    return(path_mat)
         
             
             

@@ -70,5 +70,6 @@ if not error_flag:
     path = A_star.generate_path(start, end, n, obst)
     t1 = time.time()
     print("Time: ",t1-t0)
+    print("Path:", path)
 else:
     print("path end point unreachable.")
