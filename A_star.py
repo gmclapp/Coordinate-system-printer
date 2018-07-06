@@ -52,12 +52,12 @@ class node():
         self.fcost = self.gcost + self.hcost
         
     def print_node(self):
-        print("X: ",self.loc.x,
-              "Y: ",self.loc.y,
-              "Z: ",self.loc.z,
-              "\nG-cost: ",self.gcost,
-              "\nH-cost: ",self.hcost,
-              "\nF-cost: ",self.fcost,sep='')
+        print("X: %5.3f" %self.loc.x,
+              "Y: %5.3f" %self.loc.y,
+              "Z: %5.3f" %self.loc.z,
+              "\nG-cost: %5.3f" %self.gcost,
+              "\nH-cost: %5.3f" %self.hcost,
+              "\nF-cost: %5.3f" %self.fcost,sep='')
         print("\n")
     def set_walkable(self, walk=True):
         '''If walk is True, the node is reachable, and is not blocked by an
@@ -107,7 +107,7 @@ class work_envelope():
         for elem in self.open_nodes:
             exists = self.check_match(elem, n)
             if exists:
-                elem.gcost = min(gcost, elem.gcost)
+                #elem.gcost = min(gcost, elem.gcost)
                 break
             else:
                 pass
@@ -136,8 +136,42 @@ class work_envelope():
             else:
                 new.open_node(gcost, hcost, n)
                 self.open_nodes.append(new)
+                self.sort_up()
         else:
-            pass 
+            pass
+
+    def sort_up(self):
+        i = len(self.open_nodes)-1
+        while(len(self.open_nodes)>1):
+            p_i = int((i-1)/2)
+            try:
+                if self.open_nodes[i].fcost<self.open_nodes[p_i].fcost:
+                    self.open_nodes[i],self.open_nodes[p_i] = self.open_nodes[p_i],self.open_nodes[i]
+                    i = p_i
+                else:
+                    break
+            except IndexError:
+                break
+    def sort_down(self):
+        i = 0
+        while(len(self.open_nodes)>1):
+            lt_child_i = i*2 + 1
+            rt_child_i = i*2 + 2
+
+            try:
+                if (self.open_nodes[i].fcost>self.open_nodes[lt_child_i].fcost
+                    or self.open_nodes[i].fcost>self.open_nodes[rt_child_i].fcost):
+                    if (self.open_nodes[lt_child_i].fcost<self.open_nodes[rt_child_i].fcost):
+                        self.open_nodes[i],self.open_nodes[lt_child_i] = self.open_nodes[lt_child_i],self.open_nodes[i]
+                        i=lt_child_i
+                    else:
+                        self.open_nodes[i],self.open_nodes[rt_child_i] = self.open_nodes[rt_child_i],self.open_nodes[i]
+                        i=rt_child_i
+                else:
+                    break
+                
+            except IndexError:
+                break
             
     def close_node(self, n, end):
         # temporary variables for current node
@@ -244,7 +278,9 @@ class work_envelope():
         new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))
         self.new_node(gcost, new, end, n)
     
-        self.closed_nodes.append(self.open_nodes.pop(0))
+        self.open_nodes[-1],self.open_nodes[0]=self.open_nodes[0],self.open_nodes[-1]
+        self.closed_nodes.append(self.open_nodes.pop(-1))
+        self.sort_down()
                 
     def sort_nodes(self):
         self.open_nodes.sort(key=lambda x: x.fcost, reverse=False)
@@ -259,9 +295,9 @@ def generate_path(start, goal, n, *obstacles):
     location, and an arbitrary number of obstacles.'''
 
     epsilon = 0.25
-    dx = abs(goal.loc.x-start.loc.x)/n
-    dy = abs(goal.loc.y-start.loc.y)/n
-    dz = abs(goal.loc.z-start.loc.z)/n
+    dx = max(abs(goal.loc.x-start.loc.x)/n,epsilon)
+    dy = max(abs(goal.loc.y-start.loc.y)/n,epsilon)
+    dz = max(abs(goal.loc.z-start.loc.z)/n,epsilon)
     print("dx: ",dx,"dy: ",dy,"dz: ",dz,sep='')
     w_env = work_envelope(1, 1, 1, dx, dy, dz)
     
@@ -279,7 +315,7 @@ def generate_path(start, goal, n, *obstacles):
 
     try:
         while path_complete == False:
-            w_env.sort_nodes()
+            #w_env.sort_nodes()
             if w_env.check_match(w_env.open_nodes[0], goal_node):
                 print("Found the end.")
                 path = [w_env.open_nodes[0]]
@@ -292,6 +328,10 @@ def generate_path(start, goal, n, *obstacles):
                 break
             
             w_env.close_node(w_env.open_nodes[0], goal_node)
+##            for i in w_env.open_nodes:
+##                print(i.fcost)
+##            print('\n')
+                
 ##            print("Open nodes: ", len(w_env.open_nodes))
 ##            print("Closed nodes: ", len(w_env.closed_nodes))
             
