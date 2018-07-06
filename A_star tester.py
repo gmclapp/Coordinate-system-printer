@@ -37,7 +37,7 @@ def auto_entry():
 
     end = A_star.node(si.col_vec([0,5,3]))
 
-    n = 25
+    n = 3
 
     return(obst, start, payload, end, n)
 
@@ -59,17 +59,20 @@ print("Done checking.")
 
 if not error_flag:
     path1 = A_star.generate_path(start, approach, n, obst)
+    print("Path:", path1)
     # Send path1
     path2 = A_star.generate_path(approach, payload, n, obst)
+    print("Path:", path2)
     # Send path2
     # Close gripper
     path3 = A_star.generate_path(payload, approach2, n, obst)
+    print("Path:", path3)
     # Send path3
     path4 = A_star.generate_path(approach2, end, n, obst)
+    print("Path:", path4)
     # Open gripper.
     
     t1 = time.time()
     print("Time: ",t1-t0)
-    print("Path:", path)
 else:
     print("path end point unreachable.")
