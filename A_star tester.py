@@ -39,23 +39,6 @@ def auto_entry():
 obst, start, end, n = auto_entry()
 ##obst, start, end, n = manual_entry()
 
-##print("Cool obstacle!\nIt is located at:\nX: ",
-##      obst.loc.x,"\n",
-##      "Y: ", obst.loc.y,"\n",
-##      "Z: ", obst.loc.z,"\n",
-##      "It has a radius:\nR: ", obst.r,"\n",
-##      "It has a height:\nh: ", obst.h,"\n", sep='')
-
-##print("Thanks, the robot gripper will start at:\nX: ",
-##      start.loc.x,"\n",
-##      "Y: ", start.loc.y,"\n",
-##      "Z: ", start.loc.z,"\n",sep='')
-##
-##print("Ok, the payload will be retreived from:\nX: ",
-##      end.loc.x,"\n",
-##      "Y: ", end.loc.y,"\n",
-##      "Z: ", end.loc.z,"\n",sep='')
-
 t0 = time.time()
 
 error_flag = False
