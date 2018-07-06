@@ -1,5 +1,6 @@
 import sanitize_inputs as si
 import numpy as np
+import matplotlib as plt
     
 class obstacle():
     def __init__(self, location, radius, height=float('Inf')):
@@ -199,9 +200,10 @@ class work_envelope():
                 
         # Explore z dimension
         gcost = self.dz
-        
-        new = node(si.col_vec([x,y,z-self.dz]))
-        self.new_node(gcost, new, end, n)
+
+        if z-self.dz >= -0.1:
+            new = node(si.col_vec([x,y,z-self.dz]))
+            self.new_node(gcost, new, end, n)
             
         new = node(si.col_vec([x,y,z+self.dz]))
         self.new_node(gcost, new, end, n)
@@ -223,12 +225,13 @@ class work_envelope():
 
         # Explore yz diagonals
         gcost = (self.dy**2 + self.dz**2)**0.5
+        
+        if z-self.dz >= -0.1:
+            new = node(si.col_vec([x,y-self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x,y-self.dy,z-self.dz]))
-        self.new_node(gcost, new, end, n)
-
-        new = node(si.col_vec([x,y+self.dy,z-self.dz]))
-        self.new_node(gcost, new, end, n)
+            new = node(si.col_vec([x,y+self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
 
         new = node(si.col_vec([x,y-self.dy,z+self.dz]))
         self.new_node(gcost, new, end, n)
@@ -242,37 +245,39 @@ class work_envelope():
         new = node(si.col_vec([x-self.dx,y,z+self.dz]))
         self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x-self.dx,y,z-self.dz]))
-        self.new_node(gcost, new, end, n)
+        if z-self.dz >= -0.1:
+            new = node(si.col_vec([x-self.dx,y,z-self.dz]))
+            self.new_node(gcost, new, end, n)
+
+            new = node(si.col_vec([x+self.dx,y,z-self.dz]))
+            self.new_node(gcost, new, end, n)
 
         new = node(si.col_vec([x+self.dx,y,z+self.dz]))
-        self.new_node(gcost, new, end, n)
-
-        new = node(si.col_vec([x+self.dx,y,z-self.dz]))
         self.new_node(gcost, new, end, n)
 
         # Explore corners
         gcost = (self.dx**2 + self.dy**2 + self.dz**2)**0.5
 
-        new = node(si.col_vec([x-self.dx,y-self.dy,z-self.dz]))
-        self.new_node(gcost, new, end, n)
+        if z-self.dz >= -0.1:
+            new = node(si.col_vec([x-self.dx,y-self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
+
+            new = node(si.col_vec([x-self.dx,y+self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
+            
+            new = node(si.col_vec([x+self.dx,y-self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
+            
+            new = node(si.col_vec([x+self.dx,y+self.dy,z-self.dz]))
+            self.new_node(gcost, new, end, n)
 
         new = node(si.col_vec([x-self.dx,y-self.dy,z+self.dz]))
         self.new_node(gcost, new, end, n)
-
-        new = node(si.col_vec([x-self.dx,y+self.dy,z-self.dz]))
-        self.new_node(gcost, new, end, n)
-
+        
         new = node(si.col_vec([x-self.dx,y+self.dy,z+self.dz]))
         self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x+self.dx,y-self.dy,z-self.dz]))
-        self.new_node(gcost, new, end, n)
-
         new = node(si.col_vec([x+self.dx,y-self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
-
-        new = node(si.col_vec([x+self.dx,y+self.dy,z-self.dz]))
         self.new_node(gcost, new, end, n)
 
         new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))

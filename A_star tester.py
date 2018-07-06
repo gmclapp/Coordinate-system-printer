@@ -45,7 +45,7 @@ obst, start, payload, end, n = auto_entry()
 ##obst, start, end, n = manual_entry()
 
 approach = calc_approach(payload, 1.5)
-approach2 = calc_approach(payload, 1.5)
+approach2 = calc_approach(end, 1.5)
 t0 = time.time()
 
 error_flag = False
