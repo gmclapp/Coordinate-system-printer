@@ -130,10 +130,10 @@ def DH_from_file(rfile):
     
     for row in RDR:
         try:
-            alpha, a, theta, d = (float(row[0]),
-                          float(row[1]),
+            alpha, a, theta, d = (float(row[1]),
                           float(row[2]),
-                          float(row[3]))
+                          float(row[3]),
+                          float(row[4]))
             T_list.append(robotics.DH(alpha, a, theta, d))
         except ValueError:
             continue

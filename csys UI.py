@@ -7,6 +7,10 @@ blue = (0,0,1)
 green = (0,1,0)
 some_other_color = (0.25,0.5,0.75)
 
+color_list = []
+for i in range(3):
+    color_list.append((1-0.33*i, 0+0.33*i,0))
+                      
 csys_list = []
 
 root_origin = si.col_vec([0,0,0])
@@ -33,14 +37,15 @@ robot_file.close()
 
 new_csys_list=[]
 for index, T in enumerate(T_list):
-    try:
-##        new_csys_list.append(pa.csys("T"+str(index), T, new_csys_list[index-1]))
-        new_csys_list.append(pa.csys("T"+str(index), T, root))
-        new_csys_list[-1].set_color(some_other_color)
-    except IndexError:
-        new_csys_list.append(pa.csys("T"+str(index), T, root))
+    if index > 0:
+        parent = new_csys_list[index-1]
+        new = pa.csys("T"+str(index), T, parent)
+    else:
+        new = pa.csys("T"+str(index), T, root)
 
-
+    new.set_color(color_list[index])
+    new_csys_list.append(new)
+    
 csys_list += new_csys_list
 
 pa.plot_csys(csys_list)
