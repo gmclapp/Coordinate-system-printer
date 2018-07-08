@@ -20,6 +20,10 @@ def manual_entry():
 
     return(obst, start, end, n)
 
+def calc_approach(node, payload_radius):
+    approach = A_star.node(si.col_vec([node.loc.x, node.loc.y, node.loc.z+payload_radius]))
+    return(approach)
+                           
 def auto_entry():
     o_pos = si.col_vec([2,2,0])
     o_r = 1.1
@@ -29,33 +33,19 @@ def auto_entry():
     obst = A_star.obstacle(o_pos, o_r, o_h)
 
     start = A_star.node(si.col_vec([0,5,0]))
+    payload = A_star.node(si.col_vec([5,1,0]))
 
-    end = A_star.node(si.col_vec([5,1,0]))
+    end = A_star.node(si.col_vec([0,5,3]))
 
-    n = 25
+    n = 3
 
-    return(obst, start, end, n)
+    return(obst, start, payload, end, n)
 
-obst, start, end, n = auto_entry()
+obst, start, payload, end, n = auto_entry()
 ##obst, start, end, n = manual_entry()
 
-##print("Cool obstacle!\nIt is located at:\nX: ",
-##      obst.loc.x,"\n",
-##      "Y: ", obst.loc.y,"\n",
-##      "Z: ", obst.loc.z,"\n",
-##      "It has a radius:\nR: ", obst.r,"\n",
-##      "It has a height:\nh: ", obst.h,"\n", sep='')
-
-##print("Thanks, the robot gripper will start at:\nX: ",
-##      start.loc.x,"\n",
-##      "Y: ", start.loc.y,"\n",
-##      "Z: ", start.loc.z,"\n",sep='')
-##
-##print("Ok, the payload will be retreived from:\nX: ",
-##      end.loc.x,"\n",
-##      "Y: ", end.loc.y,"\n",
-##      "Z: ", end.loc.z,"\n",sep='')
-
+approach = calc_approach(payload, 1.5)
+approach2 = calc_approach(payload, 1.5)
 t0 = time.time()
 
 error_flag = False
@@ -63,13 +53,26 @@ error_flag = False
 print("Checking path ends")    
 temp1 = obst.collision_detect(start)
 temp2 = obst.collision_detect(end)
-error_flag = temp1 or temp2
+temp3 = obst.collision_detect(approach)
+error_flag = temp1 or temp2 or temp3
 print("Done checking.")
 
 if not error_flag:
-    path = A_star.generate_path(start, end, n, obst)
+    path1 = A_star.generate_path(start, approach, n, obst)
+    print("Path:", path1)
+    # Send path1
+    path2 = A_star.generate_path(approach, payload, n, obst)
+    print("Path:", path2)
+    # Send path2
+    # Close gripper
+    path3 = A_star.generate_path(payload, approach2, n, obst)
+    print("Path:", path3)
+    # Send path3
+    path4 = A_star.generate_path(approach2, end, n, obst)
+    print("Path:", path4)
+    # Open gripper.
+    
     t1 = time.time()
     print("Time: ",t1-t0)
-    print("Path:", path)
 else:
     print("path end point unreachable.")
