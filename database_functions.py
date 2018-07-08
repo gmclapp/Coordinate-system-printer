@@ -10,7 +10,7 @@ def interpolate(x1,y1,x2,y2,x):
         
     return(y)
 
-def vlookup(rfile, index, search_col, result_col):
+def vlookup_interpolate(rfile, index, search_col, result_col):
     ''' The file is where the data is stored.
     index is the item to search rows for.
     search_col is the column in which the index should be searched for.
@@ -66,6 +66,36 @@ def vlookup(rfile, index, search_col, result_col):
     # Return the x,y pairs of the search column and result column just
     # above and below the desired x value.
 
+def vlookup(rfile, index, search_col, result_col):
+    ''' The file is where the data is stored.
+    index is the item to search rows for.
+    search_col is the column in which the index should be searched for.
+    result_col should be the column from which the result should be
+    extracted.'''
+
+    index = index
+    search_col = int(search_col)
+    result_col = int(result_col)
+    
+    RDR = csv.reader(rfile, dialect = 'excel')
+
+    try:
+        print("Searching for: ", index)
+        for row in RDR:
+            print("Value found: ", row[search_col])
+
+            try:
+                if index == row[search_col]:
+                    y = row[result_col]
+                else:
+                    print("not a match.")
+            except ValueError:
+                print("Found the header...")
+                continue
+    except IndexError:
+        print("End of file.")
+    
+    
 def list_headers(rfile, r_c):
     ''' The argument should indicate whether the headers are in the
     first row or in the first column. pass 'r' for row, 'c' for
