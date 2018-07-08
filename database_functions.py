@@ -72,29 +72,25 @@ def vlookup(rfile, index, search_col, result_col):
     search_col is the column in which the index should be searched for.
     result_col should be the column from which the result should be
     extracted.'''
-
-    index = index
-    search_col = int(search_col)
-    result_col = int(result_col)
     
     RDR = csv.reader(rfile, dialect = 'excel')
 
-    try:
-        print("Searching for: ", index)
-        for row in RDR:
-            print("Value found: ", row[search_col])
-
-            try:
-                if index == row[search_col]:
-                    y = row[result_col]
-                else:
-                    print("not a match.")
-            except ValueError:
-                print("Found the header...")
-                continue
-    except IndexError:
-        print("End of file.")
+    print("Searching for:", index)
+    y=None
     
+    for row in RDR:
+        temp = row[search_col]
+        print("Value found:", row[search_col])
+
+        try:
+            if index == int(row[search_col]):
+                y = row[result_col]
+            else:
+                print("not a match.")
+        except ValueError:
+            print("Found the header...")
+            continue
+    return(y)
     
 def list_headers(rfile, r_c):
     ''' The argument should indicate whether the headers are in the
