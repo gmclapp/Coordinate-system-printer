@@ -42,6 +42,4 @@ C = pa.csys('C', robotics.DH(alpha1, a1, theta1, d1), root)
 C.set_color(some_other_color)
 csys_list.append(C)
 
-
-
 pa.plot_csys(csys_list)
