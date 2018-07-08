@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import sanitize_inputs as si
 import robotics
+import csv
 
 class row_vec():
     '''Retrieves a list of real number for x, y, and z from the user,
@@ -117,6 +118,26 @@ def auto_get_T(origin, axis, theta):
     T = robotics.HT_from_R_and_Porg(R, origin)
                                
     return(T)
+
+def DH_from_file(rfile):
+    '''This function takes a file name as an argument and returns a list
+    of homogeneous transform matrices for the links of a robot described
+    by a DH matrix contained in the given file.'''
+    T_list = []
+    RDR = csv.reader(rfile, dialect = 'excel')
+    
+    y=None
+    
+    for row in RDR:
+        try:
+            alpha, a, theta, d = (float(row[0]),
+                          float(row[1]),
+                          float(row[2]),
+                          float(row[3]))
+            T_list.append(robotics.DH(alpha, a, theta, d))
+        except ValueError:
+            continue
+    return(T_list)
 
 def plot_csys(csys_list):
     p_xmin = float('Inf')
