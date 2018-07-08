@@ -75,20 +75,33 @@ def vlookup(rfile, index, search_col, result_col):
     
     RDR = csv.reader(rfile, dialect = 'excel')
 
-    print("Searching for:", index)
     y=None
     
     for row in RDR:
-        temp = row[search_col]
-        print("Value found:", row[search_col])
-
         try:
             if index == int(row[search_col]):
                 y = row[result_col]
             else:
-                print("not a match.")
+                pass
         except ValueError:
-            print("Found the header...")
+            continue
+    return(y)
+
+def fetch_row(rfile, index, search_col):
+    '''The file is where the data is stored.
+    index is the item to search rows for.
+    search_col is the column in which the index should be searched for.'''
+    RDR = csv.reader(rfile, dialect = 'excel')
+    
+    y=None
+    
+    for row in RDR:
+        try:
+            if index == int(row[search_col]):
+                y = row
+            else:
+                pass
+        except ValueError:
             continue
     return(y)
     
