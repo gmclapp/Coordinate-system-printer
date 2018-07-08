@@ -1,6 +1,8 @@
 import csv
 
 def interpolate(x1,y1,x2,y2,x):
+    '''given data points x1,y1 and x2,y2 this function finds a y given an x
+    between x1 and x2 and linearly interpolating.'''
     try:
         y = ((y2-y1)/(x2-x1))*(x-x1) + y1
     except TypeError:
@@ -9,10 +11,11 @@ def interpolate(x1,y1,x2,y2,x):
     return(y)
 
 def vlookup(rfile, index, search_col, result_col):
-    # The file is where the data is stored.
-    # index is the item to search rows for.
-    # search_col is the column in which the index should be searched for.
-    # result_col should be the column from which the result should be extracted.
+    ''' The file is where the data is stored.
+    index is the item to search rows for.
+    search_col is the column in which the index should be searched for.
+    result_col should be the column from which the result should be
+    extracted.'''
 
     index = float(index)
     search_col = int(search_col)
@@ -28,10 +31,11 @@ def vlookup(rfile, index, search_col, result_col):
     y2 = None
 
     for row in RDR:
-        # Search for the rows just smaller and just larger than the search
-        # term. Calculate the difference between the x value in a given row
-        # and the search term. Keep the rows that result in the smallest
-        # positive difference and the smallest negative difference.
+        ''' Search for the rows just smaller and just larger than the search
+        term. Calculate the difference between the x value in a given row
+        and the search term. Keep the rows that result in the smallest
+        positive difference and the smallest negative difference.'''
+        
         try:
             diff = index - float(row[search_col])
             
@@ -63,8 +67,9 @@ def vlookup(rfile, index, search_col, result_col):
     # above and below the desired x value.
 
 def list_headers(rfile, r_c):
-    # The argument should indicate whether the headers are in the
-    # first row or in the first column
+    ''' The argument should indicate whether the headers are in the
+    first row or in the first column. pass 'r' for row, 'c' for
+    column.'''
 
     headers = []
     RDR = csv.reader(rfile, dialect = 'excel')
