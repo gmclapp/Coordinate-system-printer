@@ -179,6 +179,7 @@ class work_envelope():
         x = n.loc.x
         y = n.loc.y
         z = n.loc.z
+        dest_z = end.loc.z
 
         # Explore x dimension
         gcost = self.dx
@@ -201,12 +202,13 @@ class work_envelope():
         # Explore z dimension
         gcost = self.dz
 
-        if z-self.dz >= -0.1:
+        if z-self.dz >= -0.1 and z != dest_z:
             new = node(si.col_vec([x,y,z-self.dz]))
             self.new_node(gcost, new, end, n)
-            
-        new = node(si.col_vec([x,y,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+
+        if z != dest_z:    
+            new = node(si.col_vec([x,y,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
         # Explore xy diagonals
         gcost = (self.dx**2 + self.dy**2)**0.5
@@ -226,18 +228,19 @@ class work_envelope():
         # Explore yz diagonals
         gcost = (self.dy**2 + self.dz**2)**0.5
         
-        if z-self.dz >= -0.1:
+        if z-self.dz >= -0.1 and z != dest_z:
             new = node(si.col_vec([x,y-self.dy,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
             new = node(si.col_vec([x,y+self.dy,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x,y-self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+        if z != dest_z:
+            new = node(si.col_vec([x,y-self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x,y+self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+            new = node(si.col_vec([x,y+self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
         # Explore xz diagonals
         gcost = (self.dx**2 + self.dz**2)**0.5
@@ -245,20 +248,21 @@ class work_envelope():
         new = node(si.col_vec([x-self.dx,y,z+self.dz]))
         self.new_node(gcost, new, end, n)
 
-        if z-self.dz >= -0.1:
+        if z-self.dz >= -0.1 and z != dest_z:
             new = node(si.col_vec([x-self.dx,y,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
             new = node(si.col_vec([x+self.dx,y,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x+self.dx,y,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+        if z != dest_z:
+            new = node(si.col_vec([x+self.dx,y,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
         # Explore corners
         gcost = (self.dx**2 + self.dy**2 + self.dz**2)**0.5
 
-        if z-self.dz >= -0.1:
+        if z-self.dz >= -0.1 and z != dest_z:
             new = node(si.col_vec([x-self.dx,y-self.dy,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
@@ -271,17 +275,18 @@ class work_envelope():
             new = node(si.col_vec([x+self.dx,y+self.dy,z-self.dz]))
             self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x-self.dx,y-self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
-        
-        new = node(si.col_vec([x-self.dx,y+self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+        if z != dest_z:
+            new = node(si.col_vec([x-self.dx,y-self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
+            
+            new = node(si.col_vec([x-self.dx,y+self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x+self.dx,y-self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+            new = node(si.col_vec([x+self.dx,y-self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
 
-        new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))
-        self.new_node(gcost, new, end, n)
+            new = node(si.col_vec([x+self.dx,y+self.dy,z+self.dz]))
+            self.new_node(gcost, new, end, n)
     
         self.open_nodes[-1],self.open_nodes[0]=self.open_nodes[0],self.open_nodes[-1]
         self.closed_nodes.append(self.open_nodes.pop(-1))
@@ -344,7 +349,9 @@ def generate_path(start, goal, n, *obstacles):
         print("All nodes opened.")
 
     path_mat = np.array([goal_node.loc.x, goal_node.loc.y, goal_node.loc.z])
-    
+##    for n in w_env.open_nodes:
+##        n.print_node()
+        
     for elem in path:
         path_mat = np.row_stack([[elem.loc.x, elem.loc.y, elem.loc.z], path_mat])
 ##        elem.print_node()
