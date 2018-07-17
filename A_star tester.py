@@ -1,6 +1,7 @@
 import sanitize_inputs as si
 import A_star
 import time
+import pdb
 
 def manual_entry():
     print("Enter the coordinates of the obstacle.")
@@ -36,6 +37,7 @@ def auto_entry():
     payload = A_star.node(si.col_vec([5,1,0]))
 
     end = A_star.node(si.col_vec([0,5,3]))
+
 
     n = 3
 

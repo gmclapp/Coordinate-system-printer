@@ -1,5 +1,6 @@
 import sanitize_inputs as si
 import numpy as np
+import pdb
     
 class obstacle():
     def __init__(self, location, radius, height=float('Inf')):
@@ -301,7 +302,8 @@ def generate_path(start, goal, n, *obstacles):
     path_mat = np.array([goal_node.loc.x, goal_node.loc.y, goal_node.loc.z])
     
     for elem in path:
-        path_mat = np.row_stack([[elem.loc.x, elem.loc.y, elem.loc.z], path_mat])
+        #pdb.set_trace()
+        path_mat = np.row_stack([np.array([[elem.loc.x, elem.loc.y, elem.loc.z]]), path_mat])
 ##        elem.print_node()
     return(path_mat)
         
