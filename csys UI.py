@@ -1,6 +1,5 @@
 import print_axes as pa
 import sanitize_inputs as si
-import database_functions as df
 import robotics
 
 red = (1,0,0)
@@ -8,6 +7,10 @@ blue = (0,0,1)
 green = (0,1,0)
 some_other_color = (0.25,0.5,0.75)
 
+color_list = []
+for i in range(3):
+    color_list.append((1-0.33*i, 0+0.33*i,0))
+                      
 csys_list = []
 
 root_origin = si.col_vec([0,0,0])
@@ -29,17 +32,20 @@ csys_list.append(root)
 
 # DH method from file
 robot_file = open("robot_config.csv", mode='r')
-alpha1 = float(df.vlookup(robot_file, 1, 0, 1))
-print("Alpha1: ", alpha1)
-robot_file.seek(0)
-a1 = float(df.vlookup(robot_file, 1, 0, 2))
-robot_file.seek(0)
-theta1 = float(df.vlookup(robot_file, 1, 0, 3))
-robot_file.seek(0)
-d1 = float(df.vlookup(robot_file, 1, 0, 4))
+T_list=pa.DH_from_file(robot_file)
+robot_file.close()
 
-C = pa.csys('C', robotics.DH(alpha1, a1, theta1, d1), root)
-C.set_color(some_other_color)
-csys_list.append(C)
+new_csys_list=[]
+for index, T in enumerate(T_list):
+    if index > 0:
+        parent = new_csys_list[index-1]
+        new = pa.csys("T"+str(index), T, parent)
+    else:
+        new = pa.csys("T"+str(index), T, root)
+
+    new.set_color(color_list[index])
+    new_csys_list.append(new)
+    
+csys_list += new_csys_list
 
 pa.plot_csys(csys_list)
