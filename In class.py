@@ -1,4 +1,3 @@
-import sanitize_inputs as si
 import robotics
 import numpy as np
 
@@ -15,12 +14,17 @@ def get_R(axis, angle):
 
     return(robotics.prettymat(R))
 
-Ptip0 = si.col_vec([10.45,7.227,0])
-R0to3 = get_R('z', 119)
+L1 = 20
+w1z = 3
+theta_list = [0,45,60,90]
 
-Pw2t = si.col_vec([3,0,0])
+omega1 = np.array([0,0,w1z])
+pos1 = np.array([L1,0,0])
 
-Pw2t0 = np.dot(R0to3,Pw2t.vec)
-Pwrist = Ptip0.vec - Pw2t0
+vel1 = np.cross(omega1, L1)
 
-print(Pwrist)
+for th in theta_list:
+    R = get_R('z',th)
+    vel0 = np.dot(R, vel1)
+    print(vel0)
+    
