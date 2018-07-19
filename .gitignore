@@ -12,3 +12,5 @@ robotics_sympy.py
 *.pyc
 *.pyc
 *.pyc
+__pycache__/sanitize_inputs.cpython-36.pyc
+*.pyc
