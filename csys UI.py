@@ -47,5 +47,7 @@ for index, T in enumerate(T_list):
     new_csys_list.append(new)
     
 csys_list += new_csys_list
+for T in csys_list:
+    T.resolve()
 
 pa.plot_csys(csys_list)
