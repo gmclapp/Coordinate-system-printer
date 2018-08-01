@@ -37,7 +37,7 @@ class csys():
             self.T_root = self.T
             
         else:
-            self.T_root = np.dot(self.T,self.parent.T_root)
+            self.T_root = np.dot(self.parent.T_root,self.T)
 
         self.origin = np.transpose(self.T_root[:-1,3:])
         self.ux = np.transpose(self.T_root[:-1,0:1])
