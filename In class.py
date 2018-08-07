@@ -35,7 +35,7 @@ for i in range(len(theta1_list)):
     R02 = np.dot(R01,R12)
 
     omega2in2 = omega2 + np.dot(R12, omega1)
-    vel2 = np.cross(omega2in2, pos2) # velocity of link 2 tip in frame 2
+    vel2 =np.dot(R12,np.cross(omega1, pos1)) + np.cross(omega2in2, pos2) # velocity of link 2 tip in frame 2
     
     v2in1 = vel1 + np.dot(R12, vel2)
     print(v2in1)
