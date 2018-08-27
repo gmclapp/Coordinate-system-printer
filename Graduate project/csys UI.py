@@ -19,6 +19,7 @@ root_origin = si.col_vec([0,0,0])
 root = pa.csys('Root', pa.auto_get_T(root_origin.vec,'x',0))
 root.set_color(red)
 csys_list.append(root)
+
 ##
 ### homogeneous transform method
 ##A = pa.csys('A', pa.get_T(), root)
@@ -36,16 +37,22 @@ T_list=pa.DH_from_file(robot_file)
 robot_file.close()
 
 new_csys_list=[]
+# The following loop generates strings with which to name frames
 for index, T in enumerate(T_list):
     if index > 0:
-        parent = new_csys_list[index-1]
-        new = pa.csys("T"+str(index), T, parent)
+        parent = new_csys_list[index-1] # Sets frame parent
+        new = pa.csys("T"+str(index), T, parent) # Name frame
     else:
-        new = pa.csys("T"+str(index), T, root)
+        # sets the root as parent for the first frame
+        new = pa.csys("T"+str(index), T, root) 
 
     new.set_color(color_list[index])
     new_csys_list.append(new)
     
-csys_list += new_csys_list
+csys_list += new_csys_list # Add new frames to the list to be printed
+for T in csys_list:
+    T.resolve()
+    # This calculates the HT matrix with respect to the root. This is
+    # required for printing.
 
 pa.plot_csys(csys_list)
