@@ -1,7 +1,7 @@
 '''This package allows the user to request input from the user and handles
 most error checking and input rules.'''
 
-__version__ = "0.1"
+__version__ = "0.1.1"
 
 import numpy as np
 
@@ -59,9 +59,9 @@ def get_integer(prompt=None, upper=float('Inf'), lower=float('-Inf')):
     return(number)
 
 def get_letter(prompt=None, accept=None):
-# Gets a single alpha character that is included in the list 'accept'
-# Optionally include a prompt to the user
-# omitting the accept list allows all alpha characters.
+    '''Gets a single alpha character that is included in the list 'accept'
+    Optionally include a prompt to the user
+    omitting the accept list allows all alpha characters.'''
 
     flag = False
     while(not flag):
