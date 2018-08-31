@@ -1,3 +1,8 @@
+'''This package allows the user to request input from the user and handles
+most error checking and input rules.'''
+
+__version__ = "0.1"
+
 import numpy as np
 
 class col_vec():
